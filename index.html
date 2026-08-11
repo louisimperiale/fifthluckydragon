@@ -674,19 +674,83 @@
   </div>
 
   <div class="modal-backdrop" id="archiveModal" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
-    <div class="modal">
-      <div class="modal-bar"><span>fld_archive.dir</span><button class="close" aria-label="Close">×</button></div>
+    <div class="modal archive-shell">
+      <div class="modal-bar"><span>archive/</span><button class="close" aria-label="Close">×</button></div>
       <div class="modal-content">
-        <div class="modal-kicker">Archive / Preview</div>
-        <h2 id="archiveTitle">Fifth Lucky Dragon Archive</h2>
-        <p>This is the next major piece we’ll build: releases, videos, photos, flyers, performances, forgotten things and whatever else belongs in the history of Fifth Lucky Dragon.</p>
-        <div class="archive-preview">
-          <div><b>›</b> <span>[ 2026 ]</span> MICROPLASTICS / HEADLESS BARBIES / ...</div>
-          <div><b>›</b> <span>[ 2025 ]</span> FILES FOUND</div>
-          <div><b>›</b> <span>[ 2024 ]</span> SUNDAY SCARIES / WASTE YOUR TIME / FIGHT ME / ...</div>
-          <div><b>›</b> <span>[ 2023 ]</span> FILES FOUND</div>
-          <div><b>›</b> <span>[ 2022 ]</span> FILES FOUND</div>
-          <div><b>›</b> <span>[ ??? ]</span> ACCESS RESTRICTED</div>
+        <div class="archive-intro">
+          <div>
+            <div class="modal-kicker">Fifth Lucky Dragon</div>
+            <h2 id="archiveTitle">Archive</h2>
+            <p>Not everything here is where the project is now. It is where it has been.</p>
+          </div>
+          <div class="archive-count">12 RELEASE FILES</div>
+        </div>
+
+        <div class="archive-years">
+          <details class="archive-year" open>
+            <summary><span class="year-number">2026</span><span class="year-note">current</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="microplastics"><span class="file-date">02.18</span><span class="file-name">Microplastics</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+
+          <details class="archive-year">
+            <summary><span class="year-number">2025</span><span class="year-note">1 file</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="headless"><span class="file-date">04.24</span><span class="file-name">Headless Barbies</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+
+          <details class="archive-year">
+            <summary><span class="year-number">2024</span><span class="year-note">4 files</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="sunday"><span class="file-date">08.22</span><span class="file-name">Sunday Scaries</span><span class="file-type">single</span></button>
+              <button class="archive-file" data-release="waste"><span class="file-date">06.21</span><span class="file-name">Waste Your Time</span><span class="file-type">single</span></button>
+              <button class="archive-file" data-release="fight"><span class="file-date">04.11</span><span class="file-name">Fight Me (or call me if you want to)</span><span class="file-type">single</span></button>
+              <button class="archive-file" data-release="ikmf"><span class="file-date">02.22</span><span class="file-name">I Killed My Friend?</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+
+          <details class="archive-year">
+            <summary><span class="year-number">2023</span><span class="year-note">2 files</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="mango"><span class="file-date">09.25</span><span class="file-name">Mango</span><span class="file-type">EP</span></button>
+              <button class="archive-file" data-release="purple"><span class="file-date">02.16</span><span class="file-name">White Lies &amp; Purple Elephants</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+
+          <details class="archive-year deep">
+            <summary><span class="year-number">2021</span><span class="year-note">archive</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="truth"><span class="file-date">07.07</span><span class="file-name">Truth Be Sold</span><span class="file-type">EP</span></button>
+              <button class="archive-file" data-release="dreams"><span class="file-date">02.18</span><span class="file-name">I Keep Seeing People I Don’t Want To See (In My Dreams)</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+
+          <details class="archive-year deep">
+            <summary><span class="year-number">2019</span><span class="year-note">deep archive</span><span class="year-toggle">+</span></summary>
+            <div class="year-files">
+              <button class="archive-file" data-release="asymmetric"><span class="file-date">05.24</span><span class="file-name">Asymmetric</span><span class="file-type">album</span></button>
+              <button class="archive-file" data-release="gleaner"><span class="file-date">04.12</span><span class="file-name">Gleaner</span><span class="file-type">single</span></button>
+            </div>
+          </details>
+        </div>
+
+        <div class="release-panel" id="releasePanel">
+          <div class="release-panel-bar">
+            <span id="releasePath">archive/file</span>
+            <button class="release-panel-close" id="releasePanelClose">CLOSE</button>
+          </div>
+          <div class="release-panel-content">
+            <div id="releaseArtWrap"></div>
+            <div class="release-info">
+              <div class="modal-kicker" id="releaseType"></div>
+              <h3 id="releaseName"></h3>
+              <div class="release-meta" id="releaseDate"></div>
+              <p id="releaseDescription"></p>
+              <div class="archive-actions" id="releaseActions"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -984,7 +1048,9 @@
       });
     });
 
-    releasePanelClose.addEventListener('click', () => releasePanel.classList.remove('open'));
+    if (releasePanelClose && releasePanel) {
+      releasePanelClose.addEventListener('click', () => releasePanel.classList.remove('open'));
+    }
 
 
     const modalButtons = document.querySelectorAll('[data-modal]');
@@ -992,13 +1058,15 @@
 
     modalButtons.forEach(button => {
       button.addEventListener('click', () => {
-        document.getElementById(button.dataset.modal).classList.add('open');
+        const target = document.getElementById(button.dataset.modal);
+        if (target) target.classList.add('open');
       });
     });
 
     backdrops.forEach(backdrop => {
       const close = () => backdrop.classList.remove('open');
-      backdrop.querySelector('.close').addEventListener('click', close);
+      const closeButton = backdrop.querySelector('.close');
+      if (closeButton) closeButton.addEventListener('click', close);
       backdrop.addEventListener('click', event => {
         if (event.target === backdrop) close();
       });
