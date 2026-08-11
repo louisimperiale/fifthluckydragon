@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fifth Lucky Dragon</title>
-  <meta name="description" content="Fifth Lucky Dragon — introspective music project." />
+  <meta name="description" content="Fifth Lucky Dragon — music from Indianapolis, Indiana." />
+  <meta name="theme-color" content="#090909" />
   <link rel="icon" type="image/png" href="images/logo-solid.png" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet" />
@@ -15,376 +15,728 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black:  #090909;
-      --white:  #ede9e1;
-      --red:    #c8382a;
-      --border: rgba(237,233,225,0.1);
+      --black: #090909;
+      --white: #ede9e1;
+      --red: #c8382a;
+      --dim: rgba(237,233,225,0.48);
+      --faint: rgba(237,233,225,0.16);
+      --border: rgba(237,233,225,0.14);
     }
 
-    html { scroll-behavior: smooth; }
-
+    html { min-height: 100%; }
     body {
+      min-height: 100vh;
+      overflow-x: hidden;
       background: var(--black);
       color: var(--white);
       font-family: 'DM Mono', monospace;
+      font-size: 13px;
       font-weight: 300;
-      font-size: 14px;
-      line-height: 1.7;
       cursor: crosshair;
-      overflow-x: hidden;
     }
 
     a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
 
     body::after {
       content: '';
-      position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.032;
+      position: fixed;
+      inset: 0;
       pointer-events: none;
       z-index: 9999;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
+
+    .site {
+      min-height: 100vh;
+      position: relative;
+      isolation: isolate;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      opacity: .45;
+      background-image:
+        linear-gradient(rgba(237,233,225,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(237,233,225,.025) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at 50% 45%, black 0%, transparent 78%);
+    }
+
+    .ghost-ring {
+      position: fixed;
+      width: min(70vw, 900px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(237,233,225,.045);
+      border-radius: 50%;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      z-index: -2;
+    }
+    .ghost-ring::before,
+    .ghost-ring::after {
+      content: '';
+      position: absolute;
+      inset: 12%;
+      border: inherit;
+      border-radius: inherit;
+    }
+    .ghost-ring::after { inset: 27%; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 30;
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+    .wordmark img { height: 25px; width: auto; opacity: .88; }
+    .status {
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      margin-right: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 10px rgba(200,56,42,.55);
+    }
+
+    main {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 4rem 1.4rem 3rem;
+      min-height: 680px;
+    }
+
+    .home {
+      width: min(880px, 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .home-logo {
+      width: min(132px, 27vw);
+      margin-bottom: 1.2rem;
+      opacity: .95;
+      animation: arrive 1s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 6.8rem);
+      letter-spacing: .12em;
+      line-height: .88;
+      white-space: nowrap;
+      animation: arrive 1s .06s cubic-bezier(.16,1,.3,1) both;
+    }
+    h1 span { color: var(--red); }
+
+    .tiny-note {
+      margin-top: 1rem;
+      color: rgba(237,233,225,.36);
+      font-size: 9px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      animation: arrive 1s .12s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    .player {
+      width: min(540px, 100%);
+      margin-top: 3rem;
+      border: 1px solid var(--border);
+      background: rgba(9,9,9,.58);
+      backdrop-filter: blur(10px);
+      text-align: left;
+      box-shadow: 0 22px 70px rgba(0,0,0,.24);
+      animation: arrive 1s .18s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    .player-topbar {
+      min-height: 31px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 .7rem;
+      font-size: 8px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(237,233,225,.4);
+    }
+    .window-dots { display: flex; gap: 5px; }
+    .window-dots i {
+      width: 6px; height: 6px; border: 1px solid rgba(237,233,225,.32); border-radius: 50%; display: block;
+    }
+
+    .player-body {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 1rem;
+      padding: 1rem;
+      align-items: center;
+    }
+    .cover {
+      width: 92px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      filter: saturate(.86) contrast(1.05);
+      border: 1px solid var(--border);
+    }
+    .now { font-size: 8px; letter-spacing: .28em; text-transform: uppercase; color: var(--red); margin-bottom: .25rem; }
+    .track-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: .06em;
+      line-height: 1;
+    }
+    .file-name { margin-top: .2rem; font-size: 8px; color: rgba(237,233,225,.28); letter-spacing: .1em; }
+
+    .controls {
+      margin-top: .9rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: .8rem;
+      align-items: center;
+    }
+    .play {
+      width: 34px; height: 34px;
+      display: grid; place-items: center;
+      border: 1px solid rgba(237,233,225,.32);
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .play:hover { background: var(--white); color: var(--black); }
+    .play svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .scrub-wrap { min-width: 0; }
+    .scrub {
+      width: 100%;
+      height: 2px;
+      appearance: none;
+      background: linear-gradient(to right, var(--red) var(--progress, 0%), rgba(237,233,225,.16) var(--progress, 0%));
+      cursor: pointer;
+      display: block;
+    }
+    .scrub::-webkit-slider-thumb {
+      appearance: none; width: 8px; height: 8px; border-radius: 50%; background: var(--white);
+    }
+    .time { font-size: 8px; letter-spacing: .08em; color: rgba(237,233,225,.38); white-space: nowrap; }
+
+    .platforms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .9rem;
+      padding: .7rem 1rem .8rem;
+      border-top: 1px solid var(--border);
+      font-size: 8px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(237,233,225,.42);
+    }
+    .platforms a:hover { color: var(--white); }
 
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 200;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.1rem 2.5rem;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(16px);
-      background: rgba(9,9,9,0.88);
+      margin-top: 2.8rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .3rem 1.8rem;
+      animation: arrive 1s .25s cubic-bezier(.16,1,.3,1) both;
     }
-    .nav-logo img { height: 32px; opacity: 0.9; transition: opacity 0.2s; }
-    .nav-logo:hover img { opacity: 1; }
-    nav ul { list-style: none; display: flex; gap: 2.5rem; }
-    nav ul a { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.2s; }
-    nav ul a:hover { opacity: 1; }
-
-    #hero {
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden;
-      text-align: center;
-      padding: 8rem 2rem 5rem;
-    }
-    .hero-bg-lines { position: absolute; inset: 0; opacity: 0.055; z-index: 0; }
-    .hero-bg-lines svg { width: 100%; height: 100%; }
-    .hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
-
-    .hero-logo {
-      width: min(140px, 24vw);
-      margin-bottom: 1.8rem;
-      animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) both;
-    }
-
-    .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.8rem, 5.5vw, 5rem);
-      letter-spacing: 0.14em;
-      line-height: 1;
-      white-space: nowrap;
-      animation: riseIn 1.4s 0.1s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    .hero-title .accent { color: var(--red); }
-    .hero-rule { width: 60px; height: 1px; background: var(--border); margin: 1.8rem auto; animation: riseIn 1.4s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
-    .hero-cta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: riseIn 1.4s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
-
-    .hero-socials {
-      margin-top: 2rem;
-      display: flex; gap: 1.4rem; align-items: center; justify-content: center;
-      animation: riseIn 1.4s 0.45s cubic-bezier(0.16,1,0.3,1) both;
-    }
-    .hero-socials a { opacity: 0.35; transition: opacity 0.2s; display: flex; align-items: center; }
-    .hero-socials a:hover { opacity: 1; }
-    .hero-socials svg { width: 18px; height: 18px; fill: var(--white); }
-
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.7rem 1.8rem;
+    nav button,
+    nav a {
+      border: 0;
+      background: transparent;
+      color: rgba(237,233,225,.55);
+      cursor: pointer;
+      padding: .45rem 0;
       font-family: 'DM Mono', monospace;
-      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-      border: 1px solid rgba(237,233,225,0.35);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      position: relative;
+    }
+    nav button::after,
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 100%; bottom: 2px;
+      height: 1px;
+      background: var(--red);
+      transition: right .2s ease;
+    }
+    nav button:hover,
+    nav a:hover { color: var(--white); }
+    nav button:hover::after,
+    nav a:hover::after { right: 0; }
+
+    .instruction {
+      margin-top: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: .92rem;
+      color: rgba(237,233,225,.32);
+      animation: arrive 1s .31s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: .9rem 1.4rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+      z-index: 30;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: rgba(237,233,225,.28);
+    }
+    .counter { justify-self: start; }
+    .footer-center { justify-self: center; }
+    .socials { justify-self: end; display: flex; gap: 1rem; }
+    .socials a:hover { color: var(--white); }
+
+    .object {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      pointer-events: auto;
+      z-index: 60;
+      user-select: none;
+      filter: drop-shadow(0 5px 8px rgba(0,0,0,.38));
+      cursor: pointer;
+      transform-origin: center;
+      animation: fall var(--fall-time, 2.7s) cubic-bezier(.3,.65,.4,1) forwards;
+    }
+    .object svg { width: 100%; height: 100%; overflow: visible; }
+    .object.clock { animation-name: fallSpin; }
+    .object.ninja { animation-name: fallFlip; }
+
+    @keyframes fall {
+      0% { transform: translate(-50%,-50%) rotate(var(--start-rot, 0deg)); opacity: 0; }
+      6% { opacity: 1; }
+      82% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(var(--end-rot, 120deg)); }
+      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 70px)) rotate(var(--end-rot, 120deg)); }
+      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(var(--end-rot, 120deg)); opacity: 0; }
+    }
+    @keyframes fallSpin {
+      0% { transform: translate(-50%,-50%) rotate(0deg); opacity: 0; }
+      7% { opacity: 1; }
+      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(720deg); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(800deg); opacity: 0; }
+    }
+    @keyframes fallFlip {
+      0% { transform: translate(-50%,-50%) rotateY(0) rotate(0deg); opacity: 0; }
+      7% { opacity: 1; }
+      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotateY(1080deg) rotate(120deg); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotateY(1260deg) rotate(140deg); opacity: 0; }
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(5px);
+      display: none;
+      place-items: center;
+      padding: 1.25rem;
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal {
+      width: min(650px, 100%);
+      border: 1px solid rgba(237,233,225,.22);
+      background: #0c0c0c;
+      box-shadow: 12px 12px 0 rgba(200,56,42,.15);
+    }
+    .modal-bar {
+      height: 34px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 .7rem;
+      font-size: 8px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(237,233,225,.42);
+    }
+    .close {
+      width: 23px; height: 23px;
+      border: 1px solid var(--border);
+      background: transparent;
       color: var(--white);
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
       cursor: pointer;
     }
-    .btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
-    .btn-red { background: var(--red); border-color: var(--red); color: var(--white); }
-    .btn-red:hover { background: #d94030; border-color: #d94030; color: var(--white); }
+    .modal-content { padding: 1.6rem; }
+    .modal-kicker { font-size: 8px; color: var(--red); letter-spacing: .25em; text-transform: uppercase; margin-bottom: .45rem; }
+    .modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 7vw, 4rem); letter-spacing: .05em; line-height: .95; }
+    .modal p { margin-top: 1rem; max-width: 52ch; color: rgba(237,233,225,.52); line-height: 1.8; }
+    .archive-preview {
+      margin-top: 1.4rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: .85rem 0;
+      font-size: 10px;
+      line-height: 2;
+      color: rgba(237,233,225,.45);
+    }
+    .archive-preview span { color: var(--white); }
+    .archive-preview b { color: var(--red); font-weight: 400; }
 
-    .full-divider { width: 100%; height: 1px; background: var(--border); }
-    .section-wrap { max-width: 1080px; margin: 0 auto; padding: 6rem 2rem; }
-    .section-eyebrow { font-size: 9px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--red); margin-bottom: 0.6rem; }
-    .section-heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.4rem, 5.5vw, 4.5rem); letter-spacing: 0.04em; line-height: 1; margin-bottom: 3.5rem; }
+    .video-frame {
+      margin-top: 1.25rem;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--border);
+      background: #000;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; }
 
-    .release-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .release-cover { position: relative; overflow: hidden; }
-    .release-cover img { width: 100%; display: block; transition: transform 0.6s cubic-bezier(0.16,1,0.3,1); }
-    .release-cover:hover img { transform: scale(1.03); }
-    .release-cover::after { content: ''; position: absolute; inset: 0; border: 1px solid var(--border); pointer-events: none; }
-    .release-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: 0.04em; line-height: 1; margin-bottom: 0.4rem; }
-    .release-date { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.35; margin-bottom: 2rem; }
-    .spotify-wrap { margin-top: 2rem; border: 1px solid var(--border); }
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    .disco-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-    .disco-item { position: relative; overflow: hidden; cursor: pointer; display: block; }
-    .disco-item img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; filter: grayscale(30%) brightness(0.85); transition: filter 0.4s, transform 0.5s cubic-bezier(0.16,1,0.3,1); }
-    .disco-item:hover img { filter: grayscale(0%) brightness(1); transform: scale(1.04); }
-    .disco-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.2rem 1rem 1rem; background: linear-gradient(transparent, rgba(0,0,0,0.92)); transform: translateY(4px); opacity: 0; transition: opacity 0.3s, transform 0.3s; }
-    .disco-item:hover .disco-overlay { opacity: 1; transform: translateY(0); }
-    .disco-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.05em; line-height: 1.1; }
-    .disco-date { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.45; margin-top: 0.2rem; }
+    @media (max-width: 650px) {
+      header { padding: .9rem 1rem; }
+      .wordmark span { display: none; }
+      .status { font-size: 7px; }
+      main { padding: 3rem 1rem 2.5rem; min-height: 640px; }
+      h1 { white-space: normal; max-width: 9ch; }
+      .player-body { grid-template-columns: 72px 1fr; gap: .8rem; padding: .8rem; }
+      .cover { width: 72px; }
+      .track-name { font-size: 1.65rem; }
+      nav { gap: .2rem 1.1rem; }
+      footer { grid-template-columns: 1fr auto; padding: .8rem 1rem; }
+      .footer-center { display: none; }
+      .socials { gap: .75rem; }
+      .object { width: 34px; height: 34px; }
+    }
 
-    .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-    .video-wrapper { position: relative; padding-bottom: 56.25%; overflow: hidden; border: 1px solid var(--border); }
-    .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-    .video-meta { margin-top: 1rem; }
-    .video-eyebrow { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.35; }
-    .video-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.04em; margin-top: 0.2rem; line-height: 1.1; }
-
-    .about-grid { display: grid; grid-template-columns: 380px 1fr; gap: 6rem; align-items: start; }
-    .about-photo-wrap { position: relative; }
-    .about-photo-wrap img { width: 100%; display: block; }
-    .about-photo-wrap::before { content: ''; position: absolute; top: -10px; left: -10px; right: 10px; bottom: 10px; border: 1px solid var(--red); z-index: -1; opacity: 0.5; }
-    .pull-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.1rem, 2.2vw, 1.45rem); line-height: 1.6; opacity: 0.9; margin-bottom: 2.5rem; border-left: 2px solid var(--red); padding-left: 1.5rem; }
-    .about-text p { font-size: 13px; opacity: 0.55; line-height: 1.95; margin-bottom: 1.2rem; }
-
-    .socials { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: 2.5rem; align-items: center; }
-    .social-link { display: flex; align-items: center; gap: 0.5rem; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.2s; border: 1px solid var(--border); padding: 0.45rem 0.8rem; }
-    .social-link:hover { opacity: 1; border-color: rgba(237,233,225,0.35); }
-    .social-link svg { width: 13px; height: 13px; fill: var(--white); flex-shrink: 0; }
-
-    footer { border-top: 1px solid var(--border); padding: 2.5rem; }
-    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
-    footer img { height: 24px; opacity: 0.3; }
-    .footer-socials { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
-    .footer-social { opacity: 0.3; transition: opacity 0.2s; display: flex; align-items: center; }
-    .footer-social:hover { opacity: 0.8; }
-    .footer-social svg { width: 16px; height: 16px; fill: var(--white); }
-    footer p { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.25; }
-
-    @media (max-width: 800px) {
-      nav { padding: 1rem 1.5rem; }
-      nav ul { gap: 1.5rem; }
-      .release-grid, .about-grid, .video-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .about-grid { gap: 3rem; }
-      .disco-grid { grid-template-columns: repeat(2, 1fr); }
-      .section-wrap { padding: 4rem 1.5rem; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+      .instruction { display: none; }
     }
   </style>
 </head>
 <body>
+  <div class="site" id="site">
+    <div class="bg-grid"></div>
+    <div class="ghost-ring"></div>
 
-  <nav>
-    <a href="#hero" class="nav-logo"><img src="images/logo-solid.png" alt="Fifth Lucky Dragon" /></a>
-    <ul>
-      <li><a href="#release">Music</a></li>
-      <li><a href="#discography">Releases</a></li>
-      <li><a href="#videos">Videos</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-  </nav>
+    <header>
+      <a class="wordmark" href="#" aria-label="Fifth Lucky Dragon home">
+        <img src="images/logo-solid.png" alt="" />
+        <span>Fifth Lucky Dragon</span>
+      </a>
+      <div class="status">signal detected / indianapolis</div>
+    </header>
 
-  <section id="hero">
-    <div class="hero-bg-lines">
-      <svg viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="900" x2="800" y2="0" stroke="white" stroke-width="1"/>
-        <line x1="250" y1="900" x2="1050" y2="0" stroke="white" stroke-width="1"/>
-        <line x1="1400" y1="0" x2="550" y2="900" stroke="white" stroke-width="1"/>
-        <line x1="1150" y1="0" x2="300" y2="900" stroke="white" stroke-width="1"/>
-        <line x1="0" y1="450" x2="1400" y2="350" stroke="white" stroke-width="0.5"/>
-      </svg>
-    </div>
-    <div class="hero-inner">
-      <img src="images/LOGO_Transparent.png" alt="Fifth Lucky Dragon" class="hero-logo" />
-      <h1 class="hero-title">FIFTH <span class="accent">LUCKY</span> DRAGON</h1>
-      <div class="hero-rule"></div>
-      <div class="hero-cta">
-        <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" class="btn btn-red">Listen on Spotify</a>
-        <a href="https://www.youtube.com/@FifthLuckyDragon" target="_blank" class="btn">Watch on YouTube</a>
+    <main id="click-zone">
+      <section class="home" aria-labelledby="site-title">
+        <img src="images/LOGO_Transparent.png" class="home-logo" alt="Fifth Lucky Dragon logo" />
+        <h1 id="site-title">FIFTH <span>LUCKY</span> DRAGON</h1>
+        <p class="tiny-note">things that linger / files that survived</p>
+
+        <section class="player" aria-label="Now playing Microplastics">
+          <div class="player-topbar">
+            <span>fld_audio_player.exe</span>
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+          <div class="player-body">
+            <img class="cover" src="images/microplastics.jpg" alt="Microplastics cover artwork" />
+            <div>
+              <div class="now">Now Playing</div>
+              <div class="track-name">Microplastics</div>
+              <div class="file-name">MICROPLASTICS.MP3 / 2026</div>
+              <div class="controls">
+                <button class="play" id="playButton" type="button" aria-label="Play Microplastics">
+                  <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="scrub-wrap">
+                  <input class="scrub" id="scrub" type="range" min="0" max="100" value="0" step="0.1" aria-label="Song progress" />
+                </div>
+                <div class="time"><span id="currentTime">0:00</span> / <span id="duration">--:--</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="platforms">
+            <a href="https://open.spotify.com/track/4ZK37HfImoXpy624Ib8iUV" target="_blank" rel="noopener">Spotify ↗</a>
+            <a href="https://music.apple.com/us/artist/fifth-lucky-dragon/1271145549" target="_blank" rel="noopener">Apple Music ↗</a>
+            <a href="https://www.youtube.com/@FifthLuckyDragon" target="_blank" rel="noopener">YouTube ↗</a>
+          </div>
+          <audio id="audio" preload="metadata" src="audio/microplastics.mp3"></audio>
+        </section>
+
+        <nav aria-label="Main navigation">
+          <button type="button" data-modal="archiveModal">Archive</button>
+          <button type="button" data-modal="videoModal">Watch</button>
+          <button type="button" data-modal="showsModal">Shows</button>
+          <button type="button" data-modal="guestbookModal">Guestbook</button>
+          <button type="button" data-modal="mysteryModal">???</button>
+        </nav>
+
+        <p class="instruction">click the empty space. something might fall out.</p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="counter">visitor no. <span id="visitorNumber">001954</span></div>
+      <div class="footer-center">© 2026 Fifth Lucky Dragon</div>
+      <div class="socials">
+        <a href="https://instagram.com/fifthluckydragon" target="_blank" rel="noopener">IG</a>
+        <a href="https://tiktok.com/@fifthluckydragon" target="_blank" rel="noopener">TT</a>
+        <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" rel="noopener">SP</a>
       </div>
-      <div class="hero-socials">
-        <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" title="Spotify">
-          <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        </a>
-        <a href="https://music.apple.com/us/artist/fifth-lucky-dragon/1271145549" target="_blank" title="Apple Music">
-          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        </a>
-        <a href="https://www.youtube.com/@FifthLuckyDragon" target="_blank" title="YouTube">
-          <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-        </a>
-        <a href="https://instagram.com/fifthluckydragon" target="_blank" title="Instagram">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        </a>
-        <a href="https://tiktok.com/@fifthluckydragon" target="_blank" title="TikTok">
-          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-        </a>
-        <a href="https://www.facebook.com/fifthluckydragon" target="_blank" title="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
+    </footer>
+  </div>
 
-  <div class="full-divider"></div>
-
-  <div class="section-wrap" id="release">
-    <p class="section-eyebrow">Latest Release</p>
-    <h2 class="section-heading">Microplastics</h2>
-    <div class="release-grid">
-      <div class="release-cover">
-        <img src="images/microplastics.jpg" alt="Microplastics cover art" />
-      </div>
-      <div>
-        <h3 class="release-name">Microplastics</h3>
-        <p class="release-date">February 18, 2026</p>
-        <a href="https://open.spotify.com/track/4ZK37HfImoXpy624Ib8iUV" target="_blank" class="btn btn-red">Stream Now</a>
-        <div class="spotify-wrap">
-          <iframe src="https://open.spotify.com/embed/track/4ZK37HfImoXpy624Ib8iUV?utm_source=generator&theme=0"
-            width="100%" height="152" frameborder="0" allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
-          </iframe>
+  <div class="modal-backdrop" id="archiveModal" role="dialog" aria-modal="true" aria-labelledby="archiveTitle">
+    <div class="modal">
+      <div class="modal-bar"><span>fld_archive.dir</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-content">
+        <div class="modal-kicker">Archive / Preview</div>
+        <h2 id="archiveTitle">Files That Survived</h2>
+        <p>This is the next major piece we’ll build: releases, videos, photos, flyers, performances, forgotten things and whatever else belongs in the history of Fifth Lucky Dragon.</p>
+        <div class="archive-preview">
+          <div><b>›</b> <span>[ 2026 ]</span> MICROPLASTICS / HEADLESS BARBIES / ...</div>
+          <div><b>›</b> <span>[ 2025 ]</span> FILES FOUND</div>
+          <div><b>›</b> <span>[ 2024 ]</span> SUNDAY SCARIES / WASTE YOUR TIME / FIGHT ME / ...</div>
+          <div><b>›</b> <span>[ 2023 ]</span> FILES FOUND</div>
+          <div><b>›</b> <span>[ 2022 ]</span> FILES FOUND</div>
+          <div><b>›</b> <span>[ ??? ]</span> ACCESS RESTRICTED</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="full-divider"></div>
-
-  <div class="section-wrap" id="discography">
-    <p class="section-eyebrow">Discography</p>
-    <h2 class="section-heading">All Releases</h2>
-    <div class="disco-grid">
-      <a href="https://open.spotify.com/track/4ZK37HfImoXpy624Ib8iUV" target="_blank" class="disco-item">
-        <img src="images/microplastics.jpg" alt="Microplastics" />
-        <div class="disco-overlay"><div class="disco-title">Microplastics</div><div class="disco-date">Feb 18, 2026</div></div>
-      </a>
-      <a href="https://open.spotify.com/track/0EBwjEl2C2WRsfxRmFGNpz" target="_blank" class="disco-item">
-        <img src="images/headless-barbies.jpg" alt="Headless Barbies" />
-        <div class="disco-overlay"><div class="disco-title">Headless Barbies</div><div class="disco-date">Apr 23, 2025</div></div>
-      </a>
-      <a href="https://open.spotify.com/track/6ndJlFStZrNwmlAZEfWhxd" target="_blank" class="disco-item">
-        <img src="images/sunday-scaries.jpg" alt="Sunday Scaries" />
-        <div class="disco-overlay"><div class="disco-title">Sunday Scaries</div><div class="disco-date">Aug 22, 2024</div></div>
-      </a>
-      <a href="https://open.spotify.com/track/7HVTcg3Fx0BmmDrJ3da3ud" target="_blank" class="disco-item">
-        <img src="images/waste-your-time.jpg" alt="Waste Your Time" />
-        <div class="disco-overlay"><div class="disco-title">Waste Your Time</div><div class="disco-date">Jun 20, 2024</div></div>
-      </a>
-      <a href="https://open.spotify.com/track/1jLDGc2eqQVmwWqIfRhI55" target="_blank" class="disco-item">
-        <img src="images/fight-me.jpg" alt="Fight Me" />
-        <div class="disco-overlay"><div class="disco-title">Fight Me</div><div class="disco-date">Apr 11, 2024</div></div>
-      </a>
-      <a href="https://open.spotify.com/track/3pUGUZC6cd64DDIB2BhLWb" target="_blank" class="disco-item">
-        <img src="images/ikmf.jpg" alt="I Killed My Friend?" />
-        <div class="disco-overlay"><div class="disco-title">I Killed My Friend?</div><div class="disco-date">Feb 22, 2024</div></div>
-      </a>
-    </div>
-  </div>
-
-  <div class="full-divider"></div>
-
-  <div class="section-wrap" id="videos">
-    <p class="section-eyebrow">Visual</p>
-    <h2 class="section-heading">Music Videos</h2>
-    <div class="video-grid">
-      <div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/-W5KfjYGDrw" title="Waste Your Time"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="video-meta">
-          <p class="video-eyebrow">Music Video</p>
-          <h3 class="video-title">Waste Your Time</h3>
-        </div>
-      </div>
-      <div>
-        <div class="video-wrapper">
-          <iframe src="https://www.youtube.com/embed/Y3_tWsyKyRA" title="Fight Me"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="video-meta">
-          <p class="video-eyebrow">Music Video</p>
-          <h3 class="video-title">Fight Me (or call me if you want to)</h3>
+  <div class="modal-backdrop" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle">
+    <div class="modal">
+      <div class="modal-bar"><span>latest_transmission.mov</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-content">
+        <div class="modal-kicker">Latest Transmission</div>
+        <h2 id="videoTitle">Waste Your Time</h2>
+        <div class="video-frame">
+          <iframe src="https://www.youtube.com/embed/-W5KfjYGDrw" title="Waste Your Time music video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="full-divider"></div>
-
-  <div class="section-wrap" id="about">
-    <p class="section-eyebrow">About</p>
-    <h2 class="section-heading">Fifth Lucky Dragon</h2>
-    <div class="about-grid">
-      <div class="about-photo-wrap">
-        <img src="images/artist-photo.jpg" alt="Fifth Lucky Dragon" />
+  <div class="modal-backdrop" id="showsModal" role="dialog" aria-modal="true" aria-labelledby="showsTitle">
+    <div class="modal">
+      <div class="modal-bar"><span>shows.txt</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-content">
+        <div class="modal-kicker">Live</div>
+        <h2 id="showsTitle">Shows</h2>
+        <p>We’ll wire current shows and eventually past-show history into the archive. For this prototype, the door exists; the room is still being built.</p>
       </div>
-      <div class="about-text">
-        <p class="pull-quote">Named for a Japanese fishing vessel caught in atomic fallout. 1954. The Pacific. Nobody's fault and everybody's.</p>
-        <p>Fifth Lucky Dragon is an introspective music project from Indianapolis, Indiana. Songs about the things that linger — in the body, in the mind, in the room after everyone's left.</p>
-        <p>Six singles. More coming.</p>
-        <div class="socials">
-          <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-            Spotify
-          </a>
-          <a href="https://music.apple.com/us/artist/fifth-lucky-dragon/1271145549" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-            Apple Music
-          </a>
-          <a href="https://www.youtube.com/@FifthLuckyDragon" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-            YouTube
-          </a>
-          <a href="https://instagram.com/fifthluckydragon" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-            Instagram
-          </a>
-          <a href="https://tiktok.com/@fifthluckydragon" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-            TikTok
-          </a>
-          <a href="https://www.facebook.com/fifthluckydragon" target="_blank" class="social-link">
-            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            Facebook
-          </a>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="guestbookModal" role="dialog" aria-modal="true" aria-labelledby="guestbookTitle">
+    <div class="modal">
+      <div class="modal-bar"><span>guestbook.cgi</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-content">
+        <div class="modal-kicker">Leave Something Behind</div>
+        <h2 id="guestbookTitle">Guestbook</h2>
+        <p>The real guestbook will save visitor messages. GitHub Pages can’t store submissions by itself, so we’ll connect this to a tiny external database/service in a later pass.</p>
+        <div class="archive-preview">
+          <div><span>anonymous</span> / someday</div>
+          <div>“this space intentionally left haunted.”</div>
         </div>
       </div>
     </div>
   </div>
 
-  <footer>
-    <div class="footer-inner">
-      <img src="images/logo-solid.png" alt="Fifth Lucky Dragon" />
-      <div class="footer-socials">
-        <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" class="footer-social" title="Spotify">
-          <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-        </a>
-        <a href="https://music.apple.com/us/artist/fifth-lucky-dragon/1271145549" target="_blank" class="footer-social" title="Apple Music">
-          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        </a>
-        <a href="https://www.youtube.com/@FifthLuckyDragon" target="_blank" class="footer-social" title="YouTube">
-          <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-        </a>
-        <a href="https://instagram.com/fifthluckydragon" target="_blank" class="footer-social" title="Instagram">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        </a>
-        <a href="https://tiktok.com/@fifthluckydragon" target="_blank" class="footer-social" title="TikTok">
-          <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
-        </a>
-        <a href="https://www.facebook.com/fifthluckydragon" target="_blank" class="footer-social" title="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
+  <div class="modal-backdrop" id="mysteryModal" role="dialog" aria-modal="true" aria-labelledby="mysteryTitle">
+    <div class="modal">
+      <div class="modal-bar"><span>unknown.file</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-content">
+        <div class="modal-kicker">???</div>
+        <h2 id="mysteryTitle">Nothing Here Yet.</h2>
+        <p>Probably.</p>
       </div>
-      <p>&copy; 2026 Fifth Lucky Dragon</p>
     </div>
-  </footer>
+  </div>
 
+  <script>
+    const audio = document.getElementById('audio');
+    const playButton = document.getElementById('playButton');
+    const playIcon = document.getElementById('playIcon');
+    const scrub = document.getElementById('scrub');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+
+    const playPath = '<path d="M8 5v14l11-7z"/>';
+    const pausePath = '<path d="M6 5h4v14H6zm8 0h4v14h-4z"/>';
+
+    function formatTime(seconds) {
+      if (!Number.isFinite(seconds)) return '--:--';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function updatePlayer() {
+      const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      scrub.value = progress;
+      scrub.style.setProperty('--progress', `${progress}%`);
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationEl.textContent = formatTime(audio.duration);
+    }
+
+    playButton.addEventListener('click', async () => {
+      if (audio.paused) {
+        try { await audio.play(); } catch (e) { console.warn(e); }
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play', () => {
+      playIcon.innerHTML = pausePath;
+      playButton.setAttribute('aria-label', 'Pause Microplastics');
+      document.documentElement.style.setProperty('--red', '#d33f2f');
+    });
+    audio.addEventListener('pause', () => {
+      playIcon.innerHTML = playPath;
+      playButton.setAttribute('aria-label', 'Play Microplastics');
+      document.documentElement.style.setProperty('--red', '#c8382a');
+    });
+    audio.addEventListener('loadedmetadata', updatePlayer);
+    audio.addEventListener('timeupdate', updatePlayer);
+    audio.addEventListener('ended', updatePlayer);
+
+    scrub.addEventListener('input', () => {
+      if (!audio.duration) return;
+      audio.currentTime = (scrub.value / 100) * audio.duration;
+    });
+
+    // Intentionally fake/local-only for the prototype. We can replace it with a real counter later.
+    const visitorNumber = document.getElementById('visitorNumber');
+    const localVisits = Number(localStorage.getItem('fldLocalVisits') || 0) + 1;
+    localStorage.setItem('fldLocalVisits', localVisits);
+    visitorNumber.textContent = String(1953 + localVisits).padStart(6, '0');
+
+    const icons = {
+      mango: `
+        <svg viewBox="0 0 64 64" aria-label="mango">
+          <path d="M40 11c-7 2-13 7-16 12-6 9-7 21-1 28 6 7 18 5 25-3 8-9 8-21 2-29-3-4-6-7-10-8Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
+          <path d="M39 12c1-7 5-10 11-10" fill="none" stroke="#c8382a" stroke-width="4" stroke-linecap="round"/>
+          <path d="M45 8c5-1 9 1 12 5-5 2-10 1-14-2" fill="#c8382a"/>
+          <path d="M27 46c7 5 14 3 19-3" fill="none" stroke="#c8382a" stroke-width="2" opacity=".75"/>
+        </svg>`,
+      elephant: `
+        <svg viewBox="0 0 64 64" aria-label="elephant">
+          <path d="M12 29c0-11 8-18 19-18 12 0 20 7 20 19v15H39v-9H27v9H15V34c-2-1-3-3-3-5Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
+          <path d="M50 27c8 2 8 11 2 17-2 2-4 3-6 3" fill="none" stroke="#ede9e1" stroke-width="8" stroke-linecap="round"/>
+          <path d="M50 27c8 2 8 11 2 17-2 2-4 3-6 3" fill="none" stroke="#090909" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="35" cy="24" r="2" fill="#090909"/>
+          <path d="M21 19c-5 0-9 4-9 9 0 4 3 8 8 8 5 0 8-4 8-9 0-4-3-8-7-8Z" fill="#c8382a" stroke="#090909" stroke-width="2"/>
+        </svg>`,
+      clock: `
+        <svg viewBox="0 0 64 64" aria-label="clock">
+          <circle cx="32" cy="32" r="23" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
+          <path d="M32 16v17l11 7" fill="none" stroke="#c8382a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="32" cy="32" r="2.5" fill="#090909"/>
+          <path d="M22 7h20" stroke="#ede9e1" stroke-width="5" stroke-linecap="round"/>
+        </svg>`,
+      ninja: `
+        <svg viewBox="0 0 64 64" aria-label="ninja">
+          <circle cx="32" cy="29" r="20" fill="#191919" stroke="#ede9e1" stroke-width="2"/>
+          <path d="M16 25c9-6 23-6 32 0l-3 12H19Z" fill="#c8382a"/>
+          <path d="M20 26c8-4 16-4 24 0l-2 9H22Z" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
+          <path d="M26 30l3-1M38 29l-3 1" stroke="#090909" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18 18 9 12M46 18l9-6" stroke="#c8382a" stroke-width="4" stroke-linecap="round"/>
+          <path d="M22 48h20l-4 10H26Z" fill="#191919" stroke="#ede9e1" stroke-width="2"/>
+        </svg>`,
+      slushie: `
+        <svg viewBox="0 0 64 64" aria-label="slushie">
+          <path d="M20 23h28l-5 32H25Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
+          <path d="M21 29h26l-1 8H22Z" fill="#c8382a"/>
+          <path d="M25 23c-2-8 4-14 11-14 6 0 11 5 11 11 0 1 0 2-1 3Z" fill="#c8382a" stroke="#090909" stroke-width="3"/>
+          <path d="M41 8 51 2" stroke="#ede9e1" stroke-width="4" stroke-linecap="round"/>
+          <path d="M51 2 47 26" stroke="#ede9e1" stroke-width="3" stroke-linecap="round"/>
+        </svg>`
+    };
+
+    const iconNames = Object.keys(icons);
+    const clickZone = document.getElementById('click-zone');
+
+    clickZone.addEventListener('click', (event) => {
+      if (event.target.closest('button, a, input, .player')) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const name = iconNames[Math.floor(Math.random() * iconNames.length)];
+      const object = document.createElement('div');
+      object.className = `object ${name}`;
+      object.innerHTML = icons[name];
+      object.style.left = `${event.clientX}px`;
+      object.style.top = `${event.clientY}px`;
+      object.style.setProperty('--start-y', `${event.clientY}px`);
+      object.style.setProperty('--drift', `${Math.round((Math.random() - .5) * 150)}px`);
+      object.style.setProperty('--start-rot', `${Math.round((Math.random() - .5) * 70)}deg`);
+      object.style.setProperty('--end-rot', `${Math.round((Math.random() - .5) * 360)}deg`);
+      object.style.setProperty('--fall-time', `${(2.2 + Math.random() * 1.1).toFixed(2)}s`);
+      document.body.appendChild(object);
+      object.addEventListener('animationend', () => object.remove());
+    });
+
+    const modalButtons = document.querySelectorAll('[data-modal]');
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+
+    modalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        document.getElementById(button.dataset.modal).classList.add('open');
+      });
+    });
+
+    backdrops.forEach(backdrop => {
+      const close = () => backdrop.classList.remove('open');
+      backdrop.querySelector('.close').addEventListener('click', close);
+      backdrop.addEventListener('click', event => {
+        if (event.target === backdrop) close();
+      });
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') backdrops.forEach(b => b.classList.remove('open'));
+    });
+  </script>
 </body>
 </html>
