@@ -76,19 +76,22 @@
     .hero-inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
     .hero-logo {
-      width: min(200px, 38vw); margin-bottom: 2rem;
+      width: min(140px, 24vw);
+      margin-bottom: 1.8rem;
       animation: riseIn 1.4s cubic-bezier(0.16,1,0.3,1) both;
+      filter: brightness(0) invert(1);
     }
     .hero-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(3.5rem, 13vw, 10rem);
-      letter-spacing: 0.06em; line-height: 0.88;
+      font-size: clamp(1.8rem, 5.5vw, 5rem);
+      letter-spacing: 0.14em;
+      line-height: 1;
+      white-space: nowrap;
       animation: riseIn 1.4s 0.1s cubic-bezier(0.16,1,0.3,1) both;
     }
     .hero-title .accent { color: var(--red); }
-    .hero-rule { width: 1px; height: 60px; background: var(--border); margin: 2.5rem auto; animation: riseIn 1.4s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
-    .hero-sub { font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; opacity: 0.35; animation: riseIn 1.4s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
-    .hero-cta { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: riseIn 1.4s 0.35s cubic-bezier(0.16,1,0.3,1) both; }
+    .hero-rule { width: 60px; height: 1px; background: var(--border); margin: 1.8rem auto; animation: riseIn 1.4s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+    .hero-cta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; animation: riseIn 1.4s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
 
     /* Hero social icons row */
     .hero-socials {
@@ -223,8 +226,8 @@
       </svg>
     </div>
     <div class="hero-inner">
-      <img src="images/logo-solid.png" alt="Fifth Lucky Dragon" class="hero-logo" />
-      <h1 class="hero-title">Fifth<br/><span class="accent">Lucky</span><br/>Dragon</h1>
+      <img src="images/logo.png" alt="Fifth Lucky Dragon" class="hero-logo" />
+      <h1 class="hero-title">FIFTH <span class="accent">LUCKY</span> DRAGON</h1>
       <div class="hero-rule"></div>
       <div class="hero-cta">
         <a href="https://open.spotify.com/artist/0q7CLKIS4veqJEfjO90pYg" target="_blank" class="btn btn-red">Listen on Spotify</a>
