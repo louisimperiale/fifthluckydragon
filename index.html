@@ -364,6 +364,91 @@
     .object svg { width: 100%; height: 100%; overflow: visible; }
 
 
+
+    /* --- WATCH V1 --- */
+    .watch-shell { max-width: 900px; }
+    .watch-intro {
+      display:flex; justify-content:space-between; gap:2rem; align-items:end;
+      margin-bottom:1.8rem; padding-bottom:1rem; border-bottom:1px solid var(--border);
+    }
+    .watch-intro p { max-width:430px; margin:0; }
+    .watch-count {
+      flex-shrink:0; font-size:8px; letter-spacing:.18em;
+      text-transform:uppercase; color:rgba(237,233,225,.28);
+    }
+    .watch-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+    .watch-card {
+      border:1px solid var(--border); background:rgba(237,233,225,.018);
+      cursor:pointer; text-align:left; color:var(--white);
+      font-family:'DM Mono',monospace; padding:0; overflow:hidden;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .watch-card:hover {
+      transform:translateY(-2px);
+      border-color:rgba(237,233,225,.26);
+      background:rgba(237,233,225,.03);
+    }
+    .watch-thumb {
+      position:relative; aspect-ratio:16/9; overflow:hidden; background:#111;
+      border-bottom:1px solid var(--border);
+    }
+    .watch-thumb img {
+      width:100%; height:100%; object-fit:cover; display:block;
+      filter:grayscale(18%) brightness(.82);
+      transition:filter .2s ease, transform .3s ease;
+    }
+    .watch-card:hover .watch-thumb img {
+      filter:grayscale(0%) brightness(.98);
+      transform:scale(1.02);
+    }
+    .watch-play {
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:44px; height:44px; border:1px solid rgba(237,233,225,.6);
+      display:grid; place-items:center; background:rgba(9,9,9,.52);
+      font-size:13px;
+    }
+    .watch-meta { padding:.8rem .9rem .9rem; }
+    .watch-title {
+      font-family:'Bebas Neue',sans-serif; font-size:1.35rem;
+      line-height:1.05; letter-spacing:.04em;
+    }
+    .watch-sub {
+      margin-top:.28rem; font-size:7px; letter-spacing:.15em;
+      text-transform:uppercase; opacity:.28;
+    }
+    .watch-player {
+      display:none; margin-top:1rem; border:1px solid var(--border);
+      background:rgba(9,9,9,.86);
+    }
+    .watch-player.open { display:block; animation:panelIn .2s ease both; }
+    .watch-player-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.5rem .7rem; border-bottom:1px solid var(--border);
+      font-size:7px; letter-spacing:.15em; text-transform:uppercase; opacity:.5;
+    }
+    .watch-player-close {
+      border:0; background:none; color:var(--white); cursor:pointer;
+      font-family:'DM Mono',monospace; opacity:.65;
+    }
+    .watch-player-frame { position:relative; aspect-ratio:16/9; background:#000; }
+    .watch-player-frame iframe {
+      position:absolute; inset:0; width:100%; height:100%; border:0;
+    }
+    .watch-player-info { padding:.8rem .9rem 1rem; }
+    .watch-player-info h3 {
+      font-family:'Bebas Neue',sans-serif; font-size:1.45rem;
+      letter-spacing:.04em; line-height:1.05;
+    }
+    .watch-player-info p {
+      margin-top:.25rem; font-size:8px; letter-spacing:.12em;
+      text-transform:uppercase; opacity:.3;
+    }
+    @media (max-width:650px) {
+      .watch-intro { display:block; }
+      .watch-count { margin-top:.8rem; }
+      .watch-grid { grid-template-columns:1fr; }
+    }
+
     /* --- ARCHIVE V1 --- */
     .archive-shell { max-width: 760px; }
     .archive-intro {
@@ -756,14 +841,75 @@
     </div>
   </div>
 
-  <div class="modal-backdrop" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle">
-    <div class="modal">
-      <div class="modal-bar"><span>latest_transmission.mov</span><button class="close" aria-label="Close">×</button></div>
+  <div class="modal-backdrop" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="watchTitle">
+    <div class="modal watch-shell">
+      <div class="modal-bar"><span>watch/</span><button class="close" aria-label="Close">×</button></div>
       <div class="modal-content">
-        <div class="modal-kicker">Latest Transmission</div>
-        <h2 id="videoTitle">Waste Your Time</h2>
-        <div class="video-frame">
-          <iframe src="https://www.youtube.com/embed/-W5KfjYGDrw" title="Waste Your Time music video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        <div class="watch-intro">
+          <div>
+            <div class="modal-kicker">Selected Visuals</div>
+            <h2 id="watchTitle">Watch</h2>
+            <p>Four videos.</p>
+          </div>
+          <div class="watch-count">4 VIDEOS</div>
+        </div>
+
+        <div class="watch-grid">
+          <button class="watch-card" data-video-id="-W5KfjYGDrw" data-video-title="Waste Your Time" data-video-year="2024">
+            <div class="watch-thumb">
+              <img src="https://img.youtube.com/vi/-W5KfjYGDrw/hqdefault.jpg" alt="Waste Your Time music video thumbnail">
+              <div class="watch-play">▶</div>
+            </div>
+            <div class="watch-meta">
+              <div class="watch-title">Waste Your Time</div>
+              <div class="watch-sub">Music Video / 2024</div>
+            </div>
+          </button>
+
+          <button class="watch-card" data-video-id="Y3_tWsyKyRA" data-video-title="Fight Me (or call me if you want to)" data-video-year="2024">
+            <div class="watch-thumb">
+              <img src="https://img.youtube.com/vi/Y3_tWsyKyRA/hqdefault.jpg" alt="Fight Me music video thumbnail">
+              <div class="watch-play">▶</div>
+            </div>
+            <div class="watch-meta">
+              <div class="watch-title">Fight Me (or call me if you want to)</div>
+              <div class="watch-sub">Music Video / 2024</div>
+            </div>
+          </button>
+
+          <button class="watch-card" data-video-id="8OXadwxBLFA" data-video-title="Tell Me Something 'Bout Your Problems" data-video-year="">
+            <div class="watch-thumb">
+              <img src="https://img.youtube.com/vi/8OXadwxBLFA/hqdefault.jpg" alt="Tell Me Something 'Bout Your Problems music video thumbnail">
+              <div class="watch-play">▶</div>
+            </div>
+            <div class="watch-meta">
+              <div class="watch-title">Tell Me Something 'Bout Your Problems</div>
+              <div class="watch-sub">Music Video</div>
+            </div>
+          </button>
+
+          <button class="watch-card" data-video-id="zyDxG758FHM" data-video-title="Mango" data-video-year="2023">
+            <div class="watch-thumb">
+              <img src="https://img.youtube.com/vi/zyDxG758FHM/hqdefault.jpg" alt="Mango music video thumbnail">
+              <div class="watch-play">▶</div>
+            </div>
+            <div class="watch-meta">
+              <div class="watch-title">Mango</div>
+              <div class="watch-sub">Music Video / 2023</div>
+            </div>
+          </button>
+        </div>
+
+        <div class="watch-player" id="watchPlayer">
+          <div class="watch-player-bar">
+            <span id="watchPlayerPath">watch/video</span>
+            <button class="watch-player-close" id="watchPlayerClose">CLOSE</button>
+          </div>
+          <div class="watch-player-frame" id="watchPlayerFrame"></div>
+          <div class="watch-player-info">
+            <h3 id="watchPlayerTitle"></h3>
+            <p id="watchPlayerMeta">Music Video</p>
+          </div>
         </div>
       </div>
     </div>
@@ -939,7 +1085,7 @@
       const landingY = Math.max(0, window.innerHeight - startY - (size * .68));
       const startRot = Math.round((Math.random() - .5) * 50);
       const endRot = Math.round((Math.random() - .5) * 130);
-      const fallTime = 2800 + Math.random() * 1400;
+      const fallTime = 5200 + Math.random() * 1800;
       const lingerTime = 10000 + Math.random() * 5000;
 
       object.style.left = `${startX}px`;
@@ -952,7 +1098,7 @@
         { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 0, offset: 0 },
         { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 1, offset: .06 },
         { transform: `translate(calc(-50% + ${drift * .88}px), calc(-50% + ${landingY}px)) rotate(${endRot}deg)`, opacity: 1, offset: .78 },
-        { transform: `translate(calc(-50% + ${drift * .94}px), calc(-50% + ${landingY - 18}px)) rotate(${endRot - 12}deg)`, opacity: 1, offset: .86 },
+        { transform: `translate(calc(-50% + ${drift * .94}px), calc(-50% + ${landingY - 10}px)) rotate(${endRot - 12}deg)`, opacity: 1, offset: .86 },
         { transform: `translate(calc(-50% + ${drift * .98}px), calc(-50% + ${landingY}px)) rotate(${endRot + 5}deg)`, opacity: 1, offset: .93 },
         { transform: landingTransform, opacity: 1, offset: 1 }
       ], {
@@ -1001,6 +1147,37 @@
       event.preventDefault();
       formStatus.textContent = 'FORM READY — mailing-list connection is the next step.';
     });
+
+
+
+    const watchPlayer = document.getElementById('watchPlayer');
+    const watchPlayerFrame = document.getElementById('watchPlayerFrame');
+    const watchPlayerTitle = document.getElementById('watchPlayerTitle');
+    const watchPlayerMeta = document.getElementById('watchPlayerMeta');
+    const watchPlayerPath = document.getElementById('watchPlayerPath');
+    const watchPlayerClose = document.getElementById('watchPlayerClose');
+
+    document.querySelectorAll('.watch-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const videoId = card.dataset.videoId;
+        const title = card.dataset.videoTitle || 'Video';
+        const year = card.dataset.videoYear || '';
+
+        watchPlayerFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" title="${title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+        watchPlayerTitle.textContent = title;
+        watchPlayerMeta.textContent = year ? `Music Video / ${year}` : 'Music Video';
+        watchPlayerPath.textContent = `watch/${videoId}`;
+        watchPlayer.classList.add('open');
+        watchPlayer.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      });
+    });
+
+    if (watchPlayerClose && watchPlayer && watchPlayerFrame) {
+      watchPlayerClose.addEventListener('click', () => {
+        watchPlayer.classList.remove('open');
+        watchPlayerFrame.innerHTML = '';
+      });
+    }
 
 
     const archiveReleases = {
