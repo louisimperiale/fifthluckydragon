@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fifth Lucky Dragon</title>
-  <meta name="description" content="Fifth Lucky Dragon — music from Indianapolis, Indiana." />
+  <meta name="description" content="Fifth Lucky Dragon — music, videos, archive and more." />
   <meta name="theme-color" content="#090909" />
   <link rel="icon" type="image/png" href="images/logo-solid.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,6 +33,26 @@
       font-size: 13px;
       font-weight: 300;
       cursor: crosshair;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(237,233,225,.18) 0%, rgba(237,233,225,.07) 36%, transparent 72%);
+      box-shadow: 0 0 18px rgba(237,233,225,.10), 0 0 34px rgba(200,56,42,.05);
+      transition: width .14s ease, height .14s ease, opacity .18s ease;
+      mix-blend-mode: screen;
+    }
+    .cursor-glow.active { width: 52px; height: 52px; }
+
+    @media (pointer: coarse) {
+      .cursor-glow { display: none; }
     }
 
     a { color: inherit; text-decoration: none; }
@@ -332,39 +352,16 @@
 
     .object {
       position: fixed;
-      width: 40px;
-      height: 40px;
-      pointer-events: auto;
+      width: 46px;
+      height: 46px;
+      pointer-events: none;
       z-index: 60;
       user-select: none;
-      filter: drop-shadow(0 5px 8px rgba(0,0,0,.38));
-      cursor: pointer;
+      filter: drop-shadow(0 7px 10px rgba(0,0,0,.45));
       transform-origin: center;
-      animation: fall var(--fall-time, 2.7s) cubic-bezier(.3,.65,.4,1) forwards;
+      will-change: transform, opacity;
     }
     .object svg { width: 100%; height: 100%; overflow: visible; }
-    .object.clock { animation-name: fallSpin; }
-    .object.ninja { animation-name: fallFlip; }
-
-    @keyframes fall {
-      0% { transform: translate(-50%,-50%) rotate(var(--start-rot, 0deg)); opacity: 0; }
-      6% { opacity: 1; }
-      82% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(var(--end-rot, 120deg)); }
-      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 70px)) rotate(var(--end-rot, 120deg)); }
-      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(var(--end-rot, 120deg)); opacity: 0; }
-    }
-    @keyframes fallSpin {
-      0% { transform: translate(-50%,-50%) rotate(0deg); opacity: 0; }
-      7% { opacity: 1; }
-      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(720deg); opacity: 1; }
-      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotate(800deg); opacity: 0; }
-    }
-    @keyframes fallFlip {
-      0% { transform: translate(-50%,-50%) rotateY(0) rotate(0deg); opacity: 0; }
-      7% { opacity: 1; }
-      90% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotateY(1080deg) rotate(120deg); opacity: 1; }
-      100% { transform: translate(calc(-50% + var(--drift, 0px)), calc(100vh - var(--start-y) - 54px)) rotateY(1260deg) rotate(140deg); opacity: 0; }
-    }
 
     .modal-backdrop {
       position: fixed;
@@ -426,6 +423,58 @@
     }
     .video-frame iframe { width: 100%; height: 100%; border: 0; }
 
+    .contact-form { margin-top: 1.5rem; }
+    .contact-form label {
+      display: block;
+      margin-bottom: .55rem;
+      font-size: 8px;
+      letter-spacing: .2em;
+      color: rgba(237,233,225,.46);
+    }
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: .65rem;
+    }
+    .contact-row input {
+      min-width: 0;
+      padding: .78rem .85rem;
+      border: 1px solid var(--border);
+      background: rgba(237,233,225,.025);
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      outline: none;
+    }
+    .contact-row input:focus {
+      border-color: rgba(237,233,225,.48);
+      box-shadow: 0 0 18px rgba(237,233,225,.05);
+    }
+    .contact-row button {
+      padding: .78rem 1rem;
+      border: 1px solid rgba(237,233,225,.32);
+      background: transparent;
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .14em;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .contact-row button:hover { background: var(--white); color: var(--black); }
+    .form-status {
+      margin-top: .6rem;
+      min-height: 1.2em;
+      font-size: 8px;
+      letter-spacing: .08em;
+      color: rgba(237,233,225,.30);
+    }
+    .contact-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.5rem 0 0;
+    }
+    .contact-note { font-size: 10px; }
+
     @keyframes arrive {
       from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
@@ -433,8 +482,6 @@
 
     @media (max-width: 650px) {
       header { padding: .9rem 1rem; }
-      .wordmark span { display: none; }
-      .status { font-size: 7px; }
       main { padding: 3rem 1rem 2.5rem; min-height: 640px; }
       h1 { white-space: normal; max-width: 9ch; }
       .player-body { grid-template-columns: 72px 1fr; gap: .8rem; padding: .8rem; }
@@ -444,7 +491,7 @@
       footer { grid-template-columns: 1fr auto; padding: .8rem 1rem; }
       .footer-center { display: none; }
       .socials { gap: .75rem; }
-      .object { width: 34px; height: 34px; }
+      .object { width: 39px; height: 39px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -454,6 +501,7 @@
   </style>
 </head>
 <body>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
   <div class="site" id="site">
     <div class="bg-grid"></div>
     <div class="ghost-ring"></div>
@@ -461,16 +509,14 @@
     <header>
       <a class="wordmark" href="#" aria-label="Fifth Lucky Dragon home">
         <img src="images/logo-solid.png" alt="" />
-        <span>Fifth Lucky Dragon</span>
       </a>
-      <div class="status">signal detected / indianapolis</div>
+      <div aria-hidden="true"></div>
     </header>
 
     <main id="click-zone">
       <section class="home" aria-labelledby="site-title">
         <img src="images/LOGO_Transparent.png" class="home-logo" alt="Fifth Lucky Dragon logo" />
         <h1 id="site-title">FIFTH <span>LUCKY</span> DRAGON</h1>
-        <p class="tiny-note">things that linger / files that survived</p>
 
         <section class="player" aria-label="Now playing Microplastics">
           <div class="player-topbar">
@@ -507,10 +553,10 @@
           <button type="button" data-modal="videoModal">Watch</button>
           <button type="button" data-modal="showsModal">Shows</button>
           <button type="button" data-modal="guestbookModal">Guestbook</button>
-          <button type="button" data-modal="mysteryModal">???</button>
+          <button type="button" data-modal="contactModal">Contact</button>
         </nav>
 
-        <p class="instruction">click the empty space. something might fall out.</p>
+        <p class="instruction">click around.</p>
       </section>
     </main>
 
@@ -530,7 +576,7 @@
       <div class="modal-bar"><span>fld_archive.dir</span><button class="close" aria-label="Close">×</button></div>
       <div class="modal-content">
         <div class="modal-kicker">Archive / Preview</div>
-        <h2 id="archiveTitle">Files That Survived</h2>
+        <h2 id="archiveTitle">Fifth Lucky Dragon Archive</h2>
         <p>This is the next major piece we’ll build: releases, videos, photos, flyers, performances, forgotten things and whatever else belongs in the history of Fifth Lucky Dragon.</p>
         <div class="archive-preview">
           <div><b>›</b> <span>[ 2026 ]</span> MICROPLASTICS / HEADLESS BARBIES / ...</div>
@@ -583,13 +629,25 @@
     </div>
   </div>
 
-  <div class="modal-backdrop" id="mysteryModal" role="dialog" aria-modal="true" aria-labelledby="mysteryTitle">
+  <div class="modal-backdrop" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
     <div class="modal">
-      <div class="modal-bar"><span>unknown.file</span><button class="close" aria-label="Close">×</button></div>
+      <div class="modal-bar"><span>contact.html</span><button class="close" aria-label="Close">×</button></div>
       <div class="modal-content">
-        <div class="modal-kicker">???</div>
-        <h2 id="mysteryTitle">Nothing Here Yet.</h2>
-        <p>Probably.</p>
+        <div class="modal-kicker">Stay In The Loop</div>
+        <h2 id="contactTitle">Contact</h2>
+        <p>Join the list for new music, shows and the occasional Fifth Lucky Dragon update.</p>
+
+        <form class="contact-form" id="contactForm">
+          <label for="emailInput">EMAIL ADDRESS</label>
+          <div class="contact-row">
+            <input id="emailInput" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            <button type="submit">JOIN LIST</button>
+          </div>
+          <div class="form-status" id="formStatus">Mailing-list connection coming next.</div>
+        </form>
+
+        <div class="contact-divider"></div>
+        <p class="contact-note">Booking / press / other inquiries will live here too once we connect the final contact address.</p>
       </div>
     </div>
   </div>
@@ -656,42 +714,43 @@
     const icons = {
       mango: `
         <svg viewBox="0 0 64 64" aria-label="mango">
-          <path d="M40 11c-7 2-13 7-16 12-6 9-7 21-1 28 6 7 18 5 25-3 8-9 8-21 2-29-3-4-6-7-10-8Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
-          <path d="M39 12c1-7 5-10 11-10" fill="none" stroke="#c8382a" stroke-width="4" stroke-linecap="round"/>
-          <path d="M45 8c5-1 9 1 12 5-5 2-10 1-14-2" fill="#c8382a"/>
-          <path d="M27 46c7 5 14 3 19-3" fill="none" stroke="#c8382a" stroke-width="2" opacity=".75"/>
+          <polygon points="35,8 49,15 55,29 49,46 36,56 23,52 14,39 16,24 25,13" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <polygon points="35,8 49,15 38,24 25,13" fill="#c8382a" opacity=".92"/>
+          <polygon points="16,24 38,24 23,52 14,39" fill="#d9d4cb" opacity=".72"/>
+          <path d="M35 8c2-5 6-7 11-7" stroke="#ede9e1" stroke-width="2.5" fill="none"/>
+          <polygon points="45,3 56,6 48,13" fill="#c8382a"/>
         </svg>`,
       elephant: `
         <svg viewBox="0 0 64 64" aria-label="elephant">
-          <path d="M12 29c0-11 8-18 19-18 12 0 20 7 20 19v15H39v-9H27v9H15V34c-2-1-3-3-3-5Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
-          <path d="M50 27c8 2 8 11 2 17-2 2-4 3-6 3" fill="none" stroke="#ede9e1" stroke-width="8" stroke-linecap="round"/>
-          <path d="M50 27c8 2 8 11 2 17-2 2-4 3-6 3" fill="none" stroke="#090909" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="35" cy="24" r="2" fill="#090909"/>
-          <path d="M21 19c-5 0-9 4-9 9 0 4 3 8 8 8 5 0 8-4 8-9 0-4-3-8-7-8Z" fill="#c8382a" stroke="#090909" stroke-width="2"/>
+          <polygon points="8,27 17,14 34,10 49,18 55,31 48,43 39,43 38,55 30,55 29,43 19,43 18,54 10,54 11,37" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <polygon points="17,14 31,25 8,27" fill="#c8382a"/>
+          <polygon points="31,25 49,18 43,34" fill="#d7d2c9"/>
+          <polygon points="49,18 58,27 55,45 49,49 47,40 51,32" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <circle cx="39" cy="24" r="1.8" fill="#090909"/>
         </svg>`,
       clock: `
         <svg viewBox="0 0 64 64" aria-label="clock">
-          <circle cx="32" cy="32" r="23" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
-          <path d="M32 16v17l11 7" fill="none" stroke="#c8382a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="32" cy="32" r="2.5" fill="#090909"/>
-          <path d="M22 7h20" stroke="#ede9e1" stroke-width="5" stroke-linecap="round"/>
+          <polygon points="32,5 48,11 58,27 54,45 40,57 22,57 9,45 6,27 16,11" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <polygon points="32,5 48,11 32,22 16,11" fill="#c8382a" opacity=".9"/>
+          <path d="M32 18v16l12 7" fill="none" stroke="#090909" stroke-width="3.5" stroke-linecap="square"/>
+          <rect x="29" y="31" width="6" height="6" fill="#c8382a"/>
         </svg>`,
-      ninja: `
-        <svg viewBox="0 0 64 64" aria-label="ninja">
-          <circle cx="32" cy="29" r="20" fill="#191919" stroke="#ede9e1" stroke-width="2"/>
-          <path d="M16 25c9-6 23-6 32 0l-3 12H19Z" fill="#c8382a"/>
-          <path d="M20 26c8-4 16-4 24 0l-2 9H22Z" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
-          <path d="M26 30l3-1M38 29l-3 1" stroke="#090909" stroke-width="2" stroke-linecap="round"/>
-          <path d="M18 18 9 12M46 18l9-6" stroke="#c8382a" stroke-width="4" stroke-linecap="round"/>
-          <path d="M22 48h20l-4 10H26Z" fill="#191919" stroke="#ede9e1" stroke-width="2"/>
+      sword: `
+        <svg viewBox="0 0 64 64" aria-label="sword">
+          <polygon points="47,5 56,8 29,39 24,34" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
+          <polygon points="47,5 56,8 47,17" fill="#c8382a"/>
+          <polygon points="20,31 34,43 29,49 15,37" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
+          <polygon points="24,43 31,50 18,61 11,54" fill="#c8382a" stroke="#090909" stroke-width="2"/>
+          <polygon points="10,53 18,61 10,62 4,57" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
         </svg>`,
       slushie: `
         <svg viewBox="0 0 64 64" aria-label="slushie">
-          <path d="M20 23h28l-5 32H25Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
-          <path d="M21 29h26l-1 8H22Z" fill="#c8382a"/>
-          <path d="M25 23c-2-8 4-14 11-14 6 0 11 5 11 11 0 1 0 2-1 3Z" fill="#c8382a" stroke="#090909" stroke-width="3"/>
-          <path d="M41 8 51 2" stroke="#ede9e1" stroke-width="4" stroke-linecap="round"/>
-          <path d="M51 2 47 26" stroke="#ede9e1" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="18,21 48,21 43,57 24,57" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <polygon points="20,31 46,31 44,44 22,44" fill="#c8382a"/>
+          <polygon points="20,21 25,11 35,7 45,12 49,21" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
+          <polygon points="25,11 35,7 39,21 20,21" fill="#c8382a" opacity=".9"/>
+          <path d="M39 12 51 3" stroke="#ede9e1" stroke-width="3"/>
+          <path d="M51 3 47 29" stroke="#ede9e1" stroke-width="2.5"/>
         </svg>`
     };
 
@@ -699,22 +758,82 @@
     const clickZone = document.getElementById('click-zone');
 
     clickZone.addEventListener('click', (event) => {
-      if (event.target.closest('button, a, input, .player')) return;
+      if (event.target.closest('button, a, input, .player, .modal')) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       const name = iconNames[Math.floor(Math.random() * iconNames.length)];
       const object = document.createElement('div');
       object.className = `object ${name}`;
       object.innerHTML = icons[name];
-      object.style.left = `${event.clientX}px`;
-      object.style.top = `${event.clientY}px`;
-      object.style.setProperty('--start-y', `${event.clientY}px`);
-      object.style.setProperty('--drift', `${Math.round((Math.random() - .5) * 150)}px`);
-      object.style.setProperty('--start-rot', `${Math.round((Math.random() - .5) * 70)}deg`);
-      object.style.setProperty('--end-rot', `${Math.round((Math.random() - .5) * 360)}deg`);
-      object.style.setProperty('--fall-time', `${(2.2 + Math.random() * 1.1).toFixed(2)}s`);
+
+      const size = window.innerWidth <= 650 ? 39 : 46;
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const drift = Math.round((Math.random() - .5) * 130);
+      const landingY = Math.max(0, window.innerHeight - startY - (size * .68));
+      const startRot = Math.round((Math.random() - .5) * 50);
+      const endRot = Math.round((Math.random() - .5) * 130);
+      const fallTime = 2800 + Math.random() * 1400;
+      const lingerTime = 10000 + Math.random() * 5000;
+
+      object.style.left = `${startX}px`;
+      object.style.top = `${startY}px`;
       document.body.appendChild(object);
-      object.addEventListener('animationend', () => object.remove());
+
+      const landingTransform = `translate(calc(-50% + ${drift}px), calc(-50% + ${landingY}px)) rotate(${endRot}deg)`;
+
+      const fall = object.animate([
+        { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 0, offset: 0 },
+        { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 1, offset: .06 },
+        { transform: `translate(calc(-50% + ${drift * .88}px), calc(-50% + ${landingY}px)) rotate(${endRot}deg)`, opacity: 1, offset: .78 },
+        { transform: `translate(calc(-50% + ${drift * .94}px), calc(-50% + ${landingY - 18}px)) rotate(${endRot - 12}deg)`, opacity: 1, offset: .86 },
+        { transform: `translate(calc(-50% + ${drift * .98}px), calc(-50% + ${landingY}px)) rotate(${endRot + 5}deg)`, opacity: 1, offset: .93 },
+        { transform: landingTransform, opacity: 1, offset: 1 }
+      ], {
+        duration: fallTime,
+        easing: 'cubic-bezier(.24,.68,.32,1)',
+        fill: 'forwards'
+      });
+
+      fall.finished.then(() => {
+        object.style.transform = landingTransform;
+        object.style.opacity = '1';
+
+        setTimeout(() => {
+          const fade = object.animate([
+            { opacity: 1, transform: landingTransform },
+            { opacity: 0, transform: `${landingTransform} translateY(8px)` }
+          ], {
+            duration: 2200,
+            easing: 'ease',
+            fill: 'forwards'
+          });
+          fade.finished.then(() => object.remove());
+        }, lingerTime);
+      });
+    });
+
+    // Soft "glow in the dark" cursor halo.
+    const cursorGlow = document.getElementById('cursorGlow');
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', (event) => {
+        cursorGlow.style.left = `${event.clientX}px`;
+        cursorGlow.style.top = `${event.clientY}px`;
+        cursorGlow.style.opacity = '1';
+      });
+      document.addEventListener('mouseleave', () => cursorGlow.style.opacity = '0');
+
+      document.addEventListener('mouseover', (event) => {
+        cursorGlow.classList.toggle('active', Boolean(event.target.closest('a, button, input, .player')));
+      });
+    }
+
+    // Front-end only for now. We'll connect this to the mailing-list service next.
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    contactForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      formStatus.textContent = 'FORM READY — mailing-list connection is the next step.';
     });
 
     const modalButtons = document.querySelectorAll('[data-modal]');
