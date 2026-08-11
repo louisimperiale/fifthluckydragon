@@ -363,6 +363,108 @@
     }
     .object svg { width: 100%; height: 100%; overflow: visible; }
 
+
+    /* --- ARCHIVE V1 --- */
+    .archive-shell { max-width: 760px; }
+    .archive-intro {
+      display: flex; justify-content: space-between; gap: 2rem;
+      align-items: end; margin-bottom: 2rem; padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .archive-intro p { margin: 0; max-width: 430px; }
+    .archive-count {
+      flex-shrink: 0; font-size: 8px; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(237,233,225,.28);
+    }
+    .archive-years { display: grid; gap: .55rem; }
+    .archive-year {
+      border: 1px solid var(--border); background: rgba(237,233,225,.018);
+    }
+    .archive-year > summary {
+      list-style: none; cursor: pointer; display: grid;
+      grid-template-columns: 76px 1fr auto; align-items: center;
+      padding: .9rem 1rem; transition: background .16s ease;
+    }
+    .archive-year > summary::-webkit-details-marker { display:none; }
+    .archive-year > summary:hover { background: rgba(237,233,225,.035); }
+    .year-number {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem;
+      letter-spacing: .06em; line-height: 1;
+    }
+    .year-note {
+      font-size: 8px; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(237,233,225,.27);
+    }
+    .year-toggle { opacity: .28; font-size: 14px; transition: transform .18s ease; }
+    .archive-year[open] .year-toggle { transform: rotate(45deg); }
+    .year-files { border-top: 1px solid var(--border); padding: .45rem; }
+    .archive-file {
+      width: 100%; border: 0; background: transparent; color: var(--white);
+      font-family: 'DM Mono', monospace; cursor: pointer; text-align: left;
+      display: grid; grid-template-columns: 76px 1fr auto; gap: .6rem;
+      padding: .7rem .65rem; align-items: center; transition: background .15s ease;
+    }
+    .archive-file:hover { background: rgba(237,233,225,.04); }
+    .file-date { font-size: 8px; opacity: .27; letter-spacing: .08em; }
+    .file-name { font-size: 10px; letter-spacing: .035em; }
+    .file-type {
+      font-size: 7px; letter-spacing: .15em; text-transform: uppercase;
+      opacity: .22;
+    }
+    .archive-year.deep { opacity: .58; }
+    .archive-year.deep:hover, .archive-year.deep[open] { opacity: .9; }
+
+    .release-panel {
+      display: none; margin-top: 1rem; border: 1px solid var(--border);
+      background: rgba(9,9,9,.72);
+    }
+    .release-panel.open { display: block; animation: panelIn .2s ease both; }
+    @keyframes panelIn { from { opacity:0; transform: translateY(5px); } to { opacity:1; transform:none; } }
+    .release-panel-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:.5rem .7rem; border-bottom:1px solid var(--border);
+      font-size:7px; letter-spacing:.15em; text-transform:uppercase; opacity:.45;
+    }
+    .release-panel-close {
+      border:0; background:none; color:var(--white); cursor:pointer;
+      font-family:'DM Mono',monospace; opacity:.55;
+    }
+    .release-panel-content {
+      display:grid; grid-template-columns: 155px 1fr; gap:1.4rem; padding:1.25rem;
+    }
+    .release-art {
+      width:100%; aspect-ratio:1; object-fit:cover; border:1px solid var(--border);
+      background:rgba(237,233,225,.025);
+    }
+    .release-art.placeholder {
+      display:flex; align-items:center; justify-content:center;
+      font-size:7px; letter-spacing:.12em; text-transform:uppercase; opacity:.25;
+    }
+    .release-info h3 {
+      font-family:'Bebas Neue',sans-serif; font-size:1.75rem;
+      letter-spacing:.04em; line-height:1.05; margin:.15rem 0 .35rem;
+    }
+    .release-info .release-meta {
+      font-size:8px; letter-spacing:.12em; text-transform:uppercase;
+      opacity:.3; margin-bottom:1rem;
+    }
+    .release-info p { font-size:10px; line-height:1.75; opacity:.45; margin-bottom:1rem; }
+    .archive-actions { display:flex; flex-wrap:wrap; gap:.45rem; }
+    .archive-actions a {
+      border:1px solid var(--border); padding:.45rem .65rem;
+      font-size:7px; letter-spacing:.13em; text-transform:uppercase; opacity:.55;
+      transition:.15s ease;
+    }
+    .archive-actions a:hover { opacity:1; border-color:rgba(237,233,225,.35); }
+
+    @media (max-width:650px) {
+      .archive-intro { display:block; }
+      .archive-count { margin-top:.8rem; }
+      .archive-year > summary, .archive-file { grid-template-columns: 58px 1fr auto; }
+      .release-panel-content { grid-template-columns: 95px 1fr; gap:1rem; padding:.9rem; }
+      .release-info h3 { font-size:1.35rem; }
+    }
+
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -835,6 +937,55 @@
       event.preventDefault();
       formStatus.textContent = 'FORM READY — mailing-list connection is the next step.';
     });
+
+
+    const archiveReleases = {
+      microplastics: { name:'Microplastics', date:'February 18, 2026', type:'Single', art:'images/microplastics.jpg', spotify:'https://open.spotify.com/track/4ZK37HfImoXpy624Ib8iUV', note:'Current release.' },
+      headless: { name:'Headless Barbies', date:'April 24, 2025', type:'Single', art:'images/headless-barbies.jpg', spotify:'https://open.spotify.com/track/0EBwjEl2C2WRsfxRmFGNpz', note:'Archive file.' },
+      sunday: { name:'Sunday Scaries', date:'August 22, 2024', type:'Single', art:'images/sunday-scaries.jpg', spotify:'https://open.spotify.com/track/6ndJlFStZrNwmlAZEfWhxd', note:'Archive file.' },
+      waste: { name:'Waste Your Time', date:'June 21, 2024', type:'Single', art:'images/waste-your-time.jpg', spotify:'https://open.spotify.com/track/7HVTcg3Fx0BmmDrJ3da3ud', youtube:'https://www.youtube.com/watch?v=-W5KfjYGDrw', note:'Includes an official music video.' },
+      fight: { name:'Fight Me (or call me if you want to)', date:'April 11, 2024', type:'Single', art:'images/fight-me.jpg', spotify:'https://open.spotify.com/track/1jLDGc2eqQVmwWqIfRhI55', youtube:'https://www.youtube.com/watch?v=Y3_tWsyKyRA', note:'Includes an official music video.' },
+      ikmf: { name:'I Killed My Friend?', date:'February 22, 2024', type:'Single', art:'images/ikmf.jpg', spotify:'https://open.spotify.com/track/3pUGUZC6cd64DDIB2BhLWb', note:'Archive file.' },
+      mango: { name:'Mango', date:'September 25, 2023', type:'EP', note:'Earlier Fifth Lucky Dragon. More artifacts can be added here as the archive grows.' },
+      purple: { name:'White Lies & Purple Elephants', date:'February 16, 2023', type:'Single', note:'Earlier Fifth Lucky Dragon. More artifacts can be added here as the archive grows.' },
+      truth: { name:'Truth Be Sold', date:'July 7, 2021', type:'EP', note:'Historical archive.' },
+      dreams: { name:'I Keep Seeing People I Don’t Want To See (In My Dreams)', date:'February 18, 2021', type:'Single', note:'Historical archive.' },
+      asymmetric: { name:'Asymmetric', date:'May 24, 2019', type:'Album', note:'Deep archive. Part of the beginning of Fifth Lucky Dragon.' },
+      gleaner: { name:'Gleaner', date:'April 12, 2019', type:'Single', note:'Deep archive. The first Fifth Lucky Dragon single.' }
+    };
+
+    const releasePanel = document.getElementById('releasePanel');
+    const releasePanelClose = document.getElementById('releasePanelClose');
+
+    document.querySelectorAll('.archive-file').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.release;
+        const release = archiveReleases[key];
+        if (!release) return;
+
+        document.getElementById('releasePath').textContent = `archive/${key}`;
+        document.getElementById('releaseType').textContent = release.type;
+        document.getElementById('releaseName').textContent = release.name;
+        document.getElementById('releaseDate').textContent = release.date;
+        document.getElementById('releaseDescription').textContent = release.note || '';
+
+        const artWrap = document.getElementById('releaseArtWrap');
+        artWrap.innerHTML = release.art
+          ? `<img class="release-art" src="${release.art}" alt="${release.name} artwork" />`
+          : `<div class="release-art placeholder">artwork / artifact</div>`;
+
+        const actions = document.getElementById('releaseActions');
+        actions.innerHTML = '';
+        if (release.spotify) actions.innerHTML += `<a href="${release.spotify}" target="_blank" rel="noopener">Listen</a>`;
+        if (release.youtube) actions.innerHTML += `<a href="${release.youtube}" target="_blank" rel="noopener">Watch</a>`;
+
+        releasePanel.classList.add('open');
+        releasePanel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      });
+    });
+
+    releasePanelClose.addEventListener('click', () => releasePanel.classList.remove('open'));
+
 
     const modalButtons = document.querySelectorAll('[data-modal]');
     const backdrops = document.querySelectorAll('.modal-backdrop');
