@@ -44,8 +44,8 @@
       z-index: 9998;
       opacity: 0;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(237,233,225,.18) 0%, rgba(237,233,225,.07) 36%, transparent 72%);
-      box-shadow: 0 0 18px rgba(237,233,225,.10), 0 0 34px rgba(200,56,42,.05);
+      background: radial-gradient(circle, rgba(237,233,225,.27) 0%, rgba(237,233,225,.11) 36%, transparent 74%);
+      box-shadow: 0 0 22px rgba(237,233,225,.15), 0 0 42px rgba(200,56,42,.08);
       transition: width .14s ease, height .14s ease, opacity .18s ease;
       mix-blend-mode: screen;
     }
@@ -324,11 +324,23 @@
 
     .instruction {
       margin-top: 2rem;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: .92rem;
-      color: rgba(237,233,225,.32);
+      font-family: 'DM Mono', monospace;
+      font-style: normal;
+      font-size: 8px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(237,233,225,.31);
       animation: arrive 1s .31s cubic-bezier(.16,1,.3,1) both;
+    }
+    .instruction::before {
+      content: '[ ';
+      color: var(--red);
+      opacity: .75;
+    }
+    .instruction::after {
+      content: ' ]';
+      color: var(--red);
+      opacity: .75;
     }
 
     footer {
@@ -357,7 +369,7 @@
       pointer-events: none;
       z-index: 60;
       user-select: none;
-      filter: drop-shadow(0 7px 10px rgba(0,0,0,.45));
+      filter: drop-shadow(2px 4px 0 rgba(0,0,0,.42)) drop-shadow(0 8px 10px rgba(0,0,0,.24));
       transform-origin: center;
       will-change: transform, opacity;
     }
@@ -1101,70 +1113,90 @@
     localStorage.setItem('fldLocalVisits', localVisits);
     visitorNumber.textContent = String(1953 + localVisits).padStart(6, '0');
 
+    // Hand-cut / photocopied object set. Each object points back to a song or FLD era.
     const icons = {
       mango: `
         <svg viewBox="0 0 64 64" aria-label="mango">
-          <polygon points="35,8 49,15 55,29 49,46 36,56 23,52 14,39 16,24 25,13" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <polygon points="35,8 49,15 38,24 25,13" fill="#c8382a" opacity=".92"/>
-          <polygon points="16,24 38,24 23,52 14,39" fill="#d9d4cb" opacity=".72"/>
-          <path d="M35 8c2-5 6-7 11-7" stroke="#ede9e1" stroke-width="2.5" fill="none"/>
-          <polygon points="45,3 56,6 48,13" fill="#c8382a"/>
+          <path d="M39 10C24 8 12 21 13 38c1 14 12 20 24 16 14-5 20-21 13-33-3-6-7-9-11-11Z" fill="#ede9e1" stroke="#090909" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M39 11c1-6 5-9 11-9" fill="none" stroke="#090909" stroke-width="3" stroke-linecap="round"/>
+          <path d="M47 4c6-2 11 0 13 5-7 2-11 1-15-2Z" fill="#c8382a" stroke="#090909" stroke-width="2"/>
+          <path d="M19 38c7 7 17 9 28 5" fill="none" stroke="#c8382a" stroke-width="2.5" opacity=".9"/>
         </svg>`,
       elephant: `
         <svg viewBox="0 0 64 64" aria-label="elephant">
-          <polygon points="8,27 17,14 34,10 49,18 55,31 48,43 39,43 38,55 30,55 29,43 19,43 18,54 10,54 11,37" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <polygon points="17,14 31,25 8,27" fill="#c8382a"/>
-          <polygon points="31,25 49,18 43,34" fill="#d7d2c9"/>
-          <polygon points="49,18 58,27 55,45 49,49 47,40 51,32" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <circle cx="39" cy="24" r="1.8" fill="#090909"/>
-        </svg>`,
-      clock: `
-        <svg viewBox="0 0 64 64" aria-label="clock">
-          <polygon points="32,5 48,11 58,27 54,45 40,57 22,57 9,45 6,27 16,11" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <polygon points="32,5 48,11 32,22 16,11" fill="#c8382a" opacity=".9"/>
-          <path d="M32 18v16l12 7" fill="none" stroke="#090909" stroke-width="3.5" stroke-linecap="square"/>
-          <rect x="29" y="31" width="6" height="6" fill="#c8382a"/>
+          <path d="M9 25c3-10 13-16 25-15 13 1 21 9 21 20v8c0 8-4 14-10 16l-4-7c4-2 6-5 6-10v-4c-1 7-6 11-13 11H20v11h-8V40c-4-3-5-9-3-15Z" fill="#ede9e1" stroke="#090909" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M43 18c-9 1-14 7-13 17 9 1 16-5 17-14Z" fill="#c8382a" stroke="#090909" stroke-width="2.5"/>
+          <path d="M52 27c6 3 7 9 5 16-1 5 1 8 5 9-7 3-13-1-13-8" fill="none" stroke="#090909" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="49" cy="23" r="2" fill="#090909"/>
         </svg>`,
       sword: `
-        <svg viewBox="0 0 64 64" aria-label="sword">
-          <polygon points="47,5 56,8 29,39 24,34" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
-          <polygon points="47,5 56,8 47,17" fill="#c8382a"/>
-          <polygon points="20,31 34,43 29,49 15,37" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
-          <polygon points="24,43 31,50 18,61 11,54" fill="#c8382a" stroke="#090909" stroke-width="2"/>
-          <polygon points="10,53 18,61 10,62 4,57" fill="#ede9e1" stroke="#090909" stroke-width="2"/>
+        <svg viewBox="0 0 64 64" aria-label="ninja sword">
+          <path d="M51 4 59 6 27 42l-7-7Z" fill="#ede9e1" stroke="#090909" stroke-width="2.8" stroke-linejoin="round"/>
+          <path d="m45 12 9-5-6 10Z" fill="#c8382a"/>
+          <path d="m17 31 16 15-5 6-17-16Z" fill="#c8382a" stroke="#090909" stroke-width="2.8"/>
+          <path d="m24 48 7 7-10 8-8-7Z" fill="#ede9e1" stroke="#090909" stroke-width="2.8"/>
+          <path d="M8 54 20 63" stroke="#c8382a" stroke-width="3"/>
         </svg>`,
       slushie: `
-        <svg viewBox="0 0 64 64" aria-label="slushie">
-          <polygon points="18,21 48,21 43,57 24,57" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <polygon points="20,31 46,31 44,44 22,44" fill="#c8382a"/>
-          <polygon points="20,21 25,11 35,7 45,12 49,21" fill="#ede9e1" stroke="#090909" stroke-width="2.4"/>
-          <polygon points="25,11 35,7 39,21 20,21" fill="#c8382a" opacity=".9"/>
-          <path d="M39 12 51 3" stroke="#ede9e1" stroke-width="3"/>
-          <path d="M51 3 47 29" stroke="#ede9e1" stroke-width="2.5"/>
+        <svg viewBox="0 0 64 64" aria-label="brainfreeze slushie">
+          <path d="M19 25h29l-4 33H24Z" fill="#ede9e1" stroke="#090909" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M21 25c0-9 6-16 14-16 9 0 15 7 15 16Z" fill="#c8382a" stroke="#090909" stroke-width="3"/>
+          <path d="m41 14 9-12" stroke="#ede9e1" stroke-width="4" stroke-linecap="round"/>
+          <path d="M27 36h17M26 43h17" stroke="#c8382a" stroke-width="2.5"/>
+          <path d="M30 29c2 3 4 3 6 0 2 3 4 3 6 0" fill="none" stroke="#090909" stroke-width="2"/>
+        </svg>`,
+      hourglass: `
+        <svg viewBox="0 0 64 64" aria-label="hourglass">
+          <path d="M14 7h36M14 57h36" stroke="#090909" stroke-width="5" stroke-linecap="square"/>
+          <path d="M19 10h26c0 11-5 16-12 22 8 6 12 12 12 22H19c0-10 4-16 12-22-7-6-12-11-12-22Z" fill="#ede9e1" stroke="#090909" stroke-width="2.8"/>
+          <path d="M24 17h16c-2 6-5 9-8 12-4-3-7-6-8-12ZM24 49c2-7 5-10 8-13 4 3 7 7 8 13Z" fill="#c8382a"/>
+          <path d="M32 28v9" stroke="#c8382a" stroke-width="2"/>
+        </svg>`,
+      barbie: `
+        <svg viewBox="0 0 64 64" aria-label="headless doll">
+          <circle class="doll-head" cx="32" cy="10" r="7" fill="#ede9e1" stroke="#090909" stroke-width="2.5"/>
+          <path class="doll-body" d="M28 19h8l4 13 8 20-8 3-8-16-8 16-8-3 8-20Z" fill="#ede9e1" stroke="#090909" stroke-width="2.7" stroke-linejoin="round"/>
+          <path class="doll-body" d="m27 22-12 15m22-15 12 15" stroke="#090909" stroke-width="3" stroke-linecap="round"/>
+          <path class="doll-body" d="M25 31h14" stroke="#c8382a" stroke-width="4"/>
+          <path class="doll-head" d="M27 7c3-6 10-6 12 1" fill="none" stroke="#c8382a" stroke-width="3" stroke-linecap="round"/>
+        </svg>`,
+      glove: `
+        <svg viewBox="0 0 64 64" aria-label="boxing glove">
+          <path d="M15 34C7 23 12 10 24 7c7-2 13 1 16 6 6-1 11 3 12 9 2 8-3 14-10 17l-5 2-4 13-18-5 4-12Z" fill="#c8382a" stroke="#090909" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M22 17c5 0 9 3 10 8M40 13c-3 2-5 5-5 9" fill="none" stroke="#ede9e1" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="m15 45 19 6-2 9-20-6Z" fill="#ede9e1" stroke="#090909" stroke-width="3"/>
         </svg>`
     };
 
     const iconNames = Object.keys(icons);
     const clickZone = document.getElementById('click-zone');
+    let lastIconName = null;
+
+    function chooseDifferentIcon() {
+      const choices = iconNames.filter(name => name !== lastIconName);
+      const name = choices[Math.floor(Math.random() * choices.length)];
+      lastIconName = name;
+      return name;
+    }
 
     clickZone.addEventListener('click', (event) => {
       if (event.target.closest('button, a, input, .player, .modal')) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      const name = iconNames[Math.floor(Math.random() * iconNames.length)];
+      const name = chooseDifferentIcon();
       const object = document.createElement('div');
       object.className = `object ${name}`;
       object.innerHTML = icons[name];
 
-      const size = window.innerWidth <= 650 ? 39 : 46;
+      const size = window.innerWidth <= 650 ? 41 : 49;
       const startX = event.clientX;
       const startY = event.clientY;
-      const drift = Math.round((Math.random() - .5) * 130);
+      const drift = Math.round((Math.random() - .5) * 150);
       const landingY = Math.max(0, window.innerHeight - startY - (size * .68));
-      const startRot = Math.round((Math.random() - .5) * 50);
-      const endRot = Math.round((Math.random() - .5) * 130);
-      const fallTime = 5200 + Math.random() * 1800;
-      const lingerTime = 10000 + Math.random() * 5000;
+      const startRot = Math.round((Math.random() - .5) * 34);
+      const endRot = Math.round((Math.random() - .5) * 105);
+      const fallTime = 6100 + Math.random() * 2600;
+      const lingerTime = 11000 + Math.random() * 5000;
 
       object.style.left = `${startX}px`;
       object.style.top = `${startY}px`;
@@ -1174,20 +1206,37 @@
 
       const fall = object.animate([
         { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 0, offset: 0 },
-        { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 1, offset: .06 },
-        { transform: `translate(calc(-50% + ${drift * .88}px), calc(-50% + ${landingY}px)) rotate(${endRot}deg)`, opacity: 1, offset: .78 },
-        { transform: `translate(calc(-50% + ${drift * .94}px), calc(-50% + ${landingY - 10}px)) rotate(${endRot - 12}deg)`, opacity: 1, offset: .86 },
-        { transform: `translate(calc(-50% + ${drift * .98}px), calc(-50% + ${landingY}px)) rotate(${endRot + 5}deg)`, opacity: 1, offset: .93 },
+        { transform: `translate(-50%, -50%) rotate(${startRot}deg)`, opacity: 1, offset: .05 },
+        { transform: `translate(calc(-50% + ${drift * .35}px), calc(-50% + ${landingY * .25}px)) rotate(${startRot + 12}deg)`, opacity: 1, offset: .30 },
+        { transform: `translate(calc(-50% + ${drift * .72}px), calc(-50% + ${landingY * .63}px)) rotate(${endRot - 18}deg)`, opacity: 1, offset: .62 },
+        { transform: `translate(calc(-50% + ${drift * .96}px), calc(-50% + ${landingY}px)) rotate(${endRot}deg)`, opacity: 1, offset: .90 },
+        { transform: `translate(calc(-50% + ${drift}px), calc(-50% + ${landingY - 5}px)) rotate(${endRot - 5}deg)`, opacity: 1, offset: .95 },
         { transform: landingTransform, opacity: 1, offset: 1 }
       ], {
         duration: fallTime,
-        easing: 'cubic-bezier(.24,.68,.32,1)',
+        easing: 'cubic-bezier(.18,.52,.30,1)',
         fill: 'forwards'
       });
 
       fall.finished.then(() => {
         object.style.transform = landingTransform;
         object.style.opacity = '1';
+
+        // Headless Barbies gets its own payoff: the head pops loose after landing.
+        if (name === 'barbie') {
+          const head = object.querySelector('.doll-head');
+          if (head) {
+            head.animate([
+              { transform: 'translate(0,0) rotate(0deg)' },
+              { transform: 'translate(5px,-10px) rotate(35deg)', offset: .35 },
+              { transform: 'translate(13px,13px) rotate(125deg)' }
+            ], {
+              duration: 850,
+              easing: 'cubic-bezier(.2,.75,.35,1)',
+              fill: 'forwards'
+            });
+          }
+        }
 
         setTimeout(() => {
           const fade = object.animate([
@@ -1202,31 +1251,6 @@
         }, lingerTime);
       });
     });
-
-    // Soft "glow in the dark" cursor halo.
-    const cursorGlow = document.getElementById('cursorGlow');
-    if (window.matchMedia('(pointer: fine)').matches) {
-      document.addEventListener('mousemove', (event) => {
-        cursorGlow.style.left = `${event.clientX}px`;
-        cursorGlow.style.top = `${event.clientY}px`;
-        cursorGlow.style.opacity = '1';
-      });
-      document.addEventListener('mouseleave', () => cursorGlow.style.opacity = '0');
-
-      document.addEventListener('mouseover', (event) => {
-        cursorGlow.classList.toggle('active', Boolean(event.target.closest('a, button, input, .player')));
-      });
-    }
-
-    // Front-end only for now. We'll connect this to the mailing-list service next.
-    const contactForm = document.getElementById('contactForm');
-    const formStatus = document.getElementById('formStatus');
-    contactForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      formStatus.textContent = 'FORM READY — mailing-list connection is the next step.';
-    });
-
-
 
     const watchPlayer = document.getElementById('watchPlayer');
     const watchPlayerFrame = document.getElementById('watchPlayerFrame');
