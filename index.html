@@ -365,6 +365,57 @@
 
 
 
+
+    /* --- SHOWS V1 --- */
+    .shows-shell { max-width: 760px; }
+    .shows-intro {
+      display:flex; justify-content:space-between; gap:2rem; align-items:end;
+      margin-bottom:1.8rem; padding-bottom:1rem; border-bottom:1px solid var(--border);
+    }
+    .shows-intro p { max-width:430px; margin:0; }
+    .shows-count {
+      flex-shrink:0; font-size:8px; letter-spacing:.18em;
+      text-transform:uppercase; color:rgba(237,233,225,.28);
+    }
+    .shows-list { display:grid; gap:.7rem; }
+    .show-row {
+      display:grid; grid-template-columns:110px 1fr auto;
+      gap:1rem; align-items:center;
+      border:1px solid var(--border);
+      background:rgba(237,233,225,.018);
+      padding:1rem;
+    }
+    .show-date {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.5rem; line-height:.95; letter-spacing:.05em;
+    }
+    .show-date span {
+      display:block; margin-top:.25rem;
+      font-family:'DM Mono',monospace; font-size:7px;
+      letter-spacing:.13em; text-transform:uppercase; opacity:.28;
+    }
+    .show-name {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:1.35rem; line-height:1.05; letter-spacing:.04em;
+    }
+    .show-location {
+      margin-top:.25rem; font-size:8px; letter-spacing:.12em;
+      text-transform:uppercase; opacity:.33;
+    }
+    .show-status {
+      font-size:7px; letter-spacing:.14em; text-transform:uppercase;
+      opacity:.25; white-space:nowrap;
+    }
+    .shows-note {
+      margin-top:1rem; font-size:8px; letter-spacing:.08em; opacity:.25;
+    }
+    @media (max-width:650px) {
+      .shows-intro { display:block; }
+      .shows-count { margin-top:.8rem; }
+      .show-row { grid-template-columns:82px 1fr; }
+      .show-status { grid-column:2; }
+    }
+
     /* --- WATCH V1 --- */
     .watch-shell { max-width: 900px; }
     .watch-intro {
@@ -916,12 +967,39 @@
   </div>
 
   <div class="modal-backdrop" id="showsModal" role="dialog" aria-modal="true" aria-labelledby="showsTitle">
-    <div class="modal">
-      <div class="modal-bar"><span>shows.txt</span><button class="close" aria-label="Close">×</button></div>
+    <div class="modal shows-shell">
+      <div class="modal-bar"><span>shows/</span><button class="close" aria-label="Close">×</button></div>
       <div class="modal-content">
-        <div class="modal-kicker">Live</div>
-        <h2 id="showsTitle">Shows</h2>
-        <p>We’ll wire current shows and eventually past-show history into the archive. For this prototype, the door exists; the room is still being built.</p>
+        <div class="shows-intro">
+          <div>
+            <div class="modal-kicker">Upcoming</div>
+            <h2 id="showsTitle">Shows</h2>
+            <p>Confirmed dates.</p>
+          </div>
+          <div class="shows-count">2 DATES</div>
+        </div>
+
+        <div class="shows-list">
+          <div class="show-row">
+            <div class="show-date">AUG 29<span>2026</span></div>
+            <div>
+              <div class="show-name">Rugby Rocks Festival</div>
+              <div class="show-location">Aguilar, Colorado</div>
+            </div>
+            <div class="show-status">Tickets TBA</div>
+          </div>
+
+          <div class="show-row">
+            <div class="show-date">OCT 10<span>2026</span></div>
+            <div>
+              <div class="show-name">FEVERDREAM HALLOWEEN Festival</div>
+              <div class="show-location">Noblesville, Indiana</div>
+            </div>
+            <div class="show-status">Tickets TBA</div>
+          </div>
+        </div>
+
+        <div class="shows-note">Ticket links will appear here when available.</div>
       </div>
     </div>
   </div>
