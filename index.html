@@ -381,19 +381,21 @@
       -webkit-user-drag: none;
     }
 
-    .object.barbie { overflow:visible; }
+    .object.barbie { overflow: visible; }
     .object.barbie .attached-doll-head {
-      position:absolute;
-      width:70%;
-      left:50%;
-      top:-18%;
-      transform:translateX(-50%) rotate(-4deg);
-      transform-origin:50% 85%;
-      z-index:2;
-      pointer-events:none;
+      position: absolute;
+      width: 92%;
+      left: 50%;
+      top: -29%;
+      transform: translateX(-50%) rotate(-2deg);
+      transform-origin: 50% 88%;
+      z-index: 3;
+      pointer-events: none;
     }
     .object.barbie .attached-doll-head img {
-      width:100%; height:auto; display:block;
+      width: 100%;
+      height: auto;
+      display: block;
     }
 
     .object.landed.music-shake {
@@ -1416,31 +1418,20 @@
         // If the song is already playing when this lands, immediately join the floor vibration.
         if (audio && !audio.paused) object.classList.add('music-shake');
 
-        // Headless Barbies: the doll falls WITH her head attached, then it pops off on impact.
+        // Headless Barbies: one composite doll during the fall; detach only after impact.
         if (config.behavior === 'barbie') {
           const attachedHead = object.querySelector('.attached-doll-head');
 
           setTimeout(() => {
-            if (attachedHead) {
-              const pop = attachedHead.animate([
-                { transform:'translateX(-50%) rotate(-4deg)', opacity:1 },
-                { transform:'translate(-42%,-24%) rotate(28deg)', opacity:1, offset:.32 },
-                { transform:'translate(-20%,-52%) rotate(95deg)', opacity:1, offset:.72 },
-                { transform:'translate(12%,-22%) rotate(175deg)', opacity:0 }
-              ], {
-                duration:720,
-                easing:'cubic-bezier(.2,.75,.3,1)',
-                fill:'forwards'
-              });
-
-              pop.finished.then(() => attachedHead.remove());
-            }
+            // Hide the attached head at the same instant the detached head becomes visible.
+            if (attachedHead) attachedHead.style.visibility = 'hidden';
 
             const head = document.createElement('div');
-            head.className = 'object doll-head landed';
-            head.style.width = window.innerWidth <= 650 ? '30px' : '36px';
-            head.style.left = `${startX + drift + 8}px`;
-            head.style.top = `${window.innerHeight - 42}px`;
+            head.className = 'object doll-head';
+            head.style.width = window.innerWidth <= 650 ? '28px' : '34px';
+            head.style.left = `${startX + drift}px`;
+            head.style.top = `${window.innerHeight - 40}px`;
+            head.style.opacity = '1';
 
             const img = document.createElement('img');
             img.src = config.headSrc;
@@ -1450,18 +1441,18 @@
             document.body.appendChild(head);
 
             const headAnim = head.animate([
-              { transform:'translate(-50%,-70%) rotate(100deg)', opacity:0, offset:0 },
-              { transform:'translate(-30%,-115%) rotate(145deg)', opacity:1, offset:.16 },
-              { transform:'translate(12px,-42px) rotate(220deg)', opacity:1, offset:.62 },
-              { transform:'translate(26px,0) rotate(300deg)', opacity:1 }
+              { transform:'translate(-50%,-72%) rotate(-8deg)', opacity:1, offset:0 },
+              { transform:'translate(-36%,-135%) rotate(58deg)', opacity:1, offset:.28 },
+              { transform:'translate(10px,-48px) rotate(170deg)', opacity:1, offset:.66 },
+              { transform:'translate(24px,0) rotate(250deg)', opacity:1, offset:1 }
             ], {
-              duration:900,
-              delay:300,
-              easing:'cubic-bezier(.2,.72,.3,1)',
-              fill:'forwards'
+              duration: 980,
+              easing: 'cubic-bezier(.18,.75,.28,1)',
+              fill: 'forwards'
             });
 
             headAnim.finished.then(() => {
+              head.classList.add('landed');
               landedObjects.add(head);
               if (audio && !audio.paused) head.classList.add('music-shake');
 
@@ -1473,7 +1464,7 @@
                 fadeHead.finished.then(() => removeLandedObject(head));
               }, Math.max(4500, lingerTime - 1500));
             });
-          }, 120);
+          }, 180);
         }
 
         setTimeout(() => {
