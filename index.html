@@ -863,6 +863,113 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
       .instruction { display: none; }
     }
+
+    /* GUESTBOOK */
+
+.guestbook-intro {
+  color: var(--dim);
+  line-height: 1.7;
+  margin: 0 0 24px;
+}
+
+.guestbook-form {
+  display: grid;
+  gap: 10px;
+}
+
+.guestbook-form label {
+  color: var(--faint);
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.guestbook-form input,
+.guestbook-form textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, .35);
+  color: var(--white);
+  font: inherit;
+  font-size: 12px;
+  padding: 12px 14px;
+  outline: none;
+}
+
+.guestbook-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.guestbook-form input:focus,
+.guestbook-form textarea:focus {
+  border-color: var(--red);
+}
+
+.guestbook-form button {
+  justify-self: start;
+  margin-top: 5px;
+  border: 1px solid var(--red);
+  background: transparent;
+  color: var(--white);
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.guestbook-form button:hover {
+  background: var(--red);
+}
+
+.guestbook-status {
+  min-height: 18px;
+  color: var(--faint);
+  font-size: 10px;
+}
+
+.guestbook-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 25px 0 18px;
+}
+
+.guestbook-entries {
+  display: grid;
+  gap: 14px;
+}
+
+.guestbook-entry {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+}
+
+.guestbook-entry:last-child {
+  border-bottom: 0;
+}
+
+.guestbook-entry-name {
+  color: var(--white);
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.guestbook-entry-message {
+  color: var(--dim);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.guestbook-loading,
+.guestbook-empty {
+  color: var(--faint);
+  font-size: 10px;
+  font-style: italic;
+}
   </style>
 </head>
 <body>
@@ -1132,19 +1239,53 @@
   </div>
 
   <div class="modal-backdrop" id="guestbookModal" role="dialog" aria-modal="true" aria-labelledby="guestbookTitle">
-    <div class="modal">
-      <div class="modal-bar"><span>guestbook.cgi</span><button class="close" aria-label="Close">×</button></div>
-      <div class="modal-content">
-        <div class="modal-kicker">Leave Something Behind</div>
-        <h2 id="guestbookTitle">Guestbook</h2>
-        <p>The real guestbook will save visitor messages. GitHub Pages can’t store submissions by itself, so we’ll connect this to a tiny external database/service in a later pass.</p>
-        <div class="archive-preview">
-          <div><span>anonymous</span> / someday</div>
-          <div>“this space intentionally left haunted.”</div>
-        </div>
+  <div class="modal">
+    <div class="modal-bar">
+      <span>guestbook.cgi/</span>
+      <button class="close" aria-label="Close">×</button>
+    </div>
+
+    <div class="modal-content">
+      <div class="modal-kicker">Leave Something Behind</div>
+      <h2 id="guestbookTitle">Guestbook</h2>
+
+      <p class="guestbook-intro">
+        Sign the guestbook. Say hi, tell me your favorite song, leave something strange.
+      </p>
+
+      <form id="guestbookForm" class="guestbook-form">
+        <label for="guestbookName">Name</label>
+        <input
+          id="guestbookName"
+          name="name"
+          type="text"
+          maxlength="50"
+          required
+          placeholder="your name"
+        />
+
+        <label for="guestbookMessage">Message</label>
+        <textarea
+          id="guestbookMessage"
+          name="message"
+          maxlength="500"
+          required
+          placeholder="leave something behind..."
+        ></textarea>
+
+        <button type="submit" id="guestbookSubmit">Sign Guestbook</button>
+
+        <div id="guestbookStatus" class="guestbook-status" aria-live="polite"></div>
+      </form>
+
+      <div class="guestbook-divider"></div>
+
+      <div id="guestbookEntries" class="guestbook-entries">
+        <div class="guestbook-loading">loading entries...</div>
       </div>
     </div>
   </div>
+</div>
 
   <div class="modal-backdrop" id="contactModal" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
     <div class="modal contact-shell">
@@ -1524,5 +1665,122 @@ setTimeout(() => {
       if (event.key === 'Escape') backdrops.forEach(b => b.classList.remove('open'));
     });
   </script>
+  <script>
+  (() => {
+    const SUPABASE_URL = 'https://mhoeuiizzsnfupmebqzl.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_icQJbl92awB3VshZXZevkQ_g9tYecEk';
+
+    const form = document.getElementById('guestbookForm');
+    const nameInput = document.getElementById('guestbookName');
+    const messageInput = document.getElementById('guestbookMessage');
+    const submitButton = document.getElementById('guestbookSubmit');
+    const status = document.getElementById('guestbookStatus');
+    const entries = document.getElementById('guestbookEntries');
+
+    if (!form || !entries) return;
+
+    const headers = {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json'
+    };
+
+    function renderEntries(rows) {
+      entries.innerHTML = '';
+
+      if (!rows || rows.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'guestbook-empty';
+        empty.textContent = 'nothing here yet.';
+        entries.appendChild(empty);
+        return;
+      }
+
+      rows.forEach((row) => {
+        const entry = document.createElement('div');
+        entry.className = 'guestbook-entry';
+
+        const name = document.createElement('div');
+        name.className = 'guestbook-entry-name';
+        name.textContent = row.name;
+
+        const message = document.createElement('div');
+        message.className = 'guestbook-entry-message';
+        message.textContent = row.message;
+
+        entry.appendChild(name);
+        entry.appendChild(message);
+        entries.appendChild(entry);
+      });
+    }
+
+    async function loadGuestbook() {
+      entries.innerHTML = '<div class="guestbook-loading">loading entries...</div>';
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/guestbook?select=id,name,message,created_at&approved=eq.true&order=created_at.desc&limit=30`,
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
+
+        if (!response.ok) throw new Error('Could not load guestbook.');
+
+        const rows = await response.json();
+        renderEntries(rows);
+      } catch (error) {
+        entries.innerHTML = '';
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'guestbook-empty';
+        errorMessage.textContent = 'guestbook temporarily unavailable.';
+        entries.appendChild(errorMessage);
+      }
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const name = nameInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (!name || !message) return;
+
+      submitButton.disabled = true;
+      status.textContent = 'sending...';
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/guestbook`,
+          {
+            method: 'POST',
+            headers: {
+              ...headers,
+              Prefer: 'return=minimal'
+            },
+            body: JSON.stringify({
+              name,
+              message
+            })
+          }
+        );
+
+        if (!response.ok) throw new Error('Submission failed.');
+
+        form.reset();
+        status.textContent = 'received. it’ll appear here after approval.';
+      } catch (error) {
+        status.textContent = 'something went wrong. try again.';
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+
+    loadGuestbook();
+  })();
+</script>
 </body>
 </html>
