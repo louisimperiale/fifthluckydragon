@@ -970,6 +970,23 @@
   font-size: 10px;
   font-style: italic;
 }
+    /* MOBILE MODAL SCROLL FIX */
+@media (max-width: 650px) {
+  .modal-backdrop {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    place-items: start center;
+    padding: 1.25rem;
+  }
+
+  .modal {
+    width: 100%;
+    min-width: 0;
+    max-height: calc(100dvh - 2.5rem);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
   </style>
 </head>
 <body>
