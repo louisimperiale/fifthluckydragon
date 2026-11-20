@@ -534,7 +534,7 @@
       opacity:.25; white-space:nowrap;
     }
     .shows-note {
-      margin-top:1rem; font-size:8px; letter-spacing:.08em; opacity:.25;
+      margin-top:1rem; font-size:10px; letter-spacing:.08em; opacity:.75;
     }
     @media (max-width:650px) {
       .shows-intro { display:block; }
@@ -1227,19 +1227,22 @@
             <h2 id="showsTitle">Shows</h2>
             <p>Confirmed dates.</p>
           </div>
-          <div class="shows-count">1 DATE</div>
+          <div class="shows-count" aria-live="polite"></div>
         </div>
 
-        <div class="shows-list">
+        <div class="shows-list"></div>
+        <div class="shows-note" role="status" hidden></div>
+        <template id="showRowTemplate">
           <div class="show-row">
-            <div class="show-date">DEC 17<span>2026</span></div>
+            <time class="show-date"><span></span></time>
             <div>
-              <div class="show-name">Hoosier Dome</div>
-              <div class="show-location">Indianapolis, Indiana</div>
+              <div class="show-name"></div>
+              <div class="show-location"></div>
             </div>
-            <a class="show-status" href="https://wl.eventim.us/event/Farewell-Fest-Joshua-Powell-Emma-Peridot-and-more/711385?afflky=HoosierDome" style="opacity:1">Buy tickets ↗</a>
+            <a class="show-status" style="opacity:1">Buy tickets ↗</a>
+            <span class="show-status tickets-pending">Tickets TBA</span>
           </div>
-        </div>
+        </template>
 
       </div>
     </div>
@@ -1648,6 +1651,67 @@ setTimeout(() => {
       releasePanelClose.addEventListener('click', () => releasePanel.classList.remove('open'));
     }
 
+
+    const showsCount = document.querySelector('#showsModal .shows-count');
+    const showsList = document.querySelector('#showsModal .shows-list');
+    const showsNote = document.querySelector('#showsModal .shows-note');
+    const indianapolisDate = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Indiana/Indianapolis',
+      year: 'numeric', month: '2-digit', day: '2-digit'
+    });
+    const showMonthDay = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'UTC', month: 'short', day: 'numeric'
+    });
+
+    async function loadUpcomingShows() {
+      showsNote.textContent = 'Loading shows…';
+      showsNote.hidden = false;
+      try {
+        const response = await fetch('/shows.json', { cache: 'no-cache' });
+        if (!response.ok) throw new Error('Could not load shows.json');
+        const shows = await response.json();
+        const today = indianapolisDate.format(new Date());
+        const upcoming = shows.filter(show => {
+          if (!show || typeof show.date !== 'string' ||
+              typeof show.name !== 'string' || !show.name.trim() ||
+              typeof show.location !== 'string' || !show.location.trim() ||
+              !/^\d{4}-\d{2}-\d{2}$/.test(show.date)) return false;
+          const date = new Date(show.date + 'T00:00:00Z');
+          return Number.isFinite(date.getTime()) &&
+            date.toISOString().slice(0, 10) === show.date && show.date >= today;
+        }).sort((a, b) => a.date.localeCompare(b.date));
+
+        showsList.replaceChildren(...upcoming.map(show => {
+          const row = document.querySelector('#showRowTemplate').content.firstElementChild.cloneNode(true);
+          const date = row.querySelector('.show-date');
+          date.dateTime = show.date;
+          date.prepend(showMonthDay.format(new Date(show.date + 'T00:00:00Z')).toUpperCase());
+          date.querySelector('span').textContent = show.date.slice(0, 4);
+          row.querySelector('.show-name').textContent = show.name;
+          row.querySelector('.show-location').textContent = show.location;
+          const tickets = row.querySelector('a');
+          if (typeof show.ticketUrl === 'string' && /^https:\/\//i.test(show.ticketUrl) && URL.canParse(show.ticketUrl)) {
+            tickets.href = show.ticketUrl;
+            row.querySelector('.tickets-pending').remove();
+          } else {
+            tickets.remove();
+          }
+          return row;
+        }));
+        showsCount.textContent = upcoming.length === 1 ? '1 DATE' : upcoming.length + ' DATES';
+        showsNote.textContent = upcoming.length ? '' : 'No upcoming shows.';
+        showsNote.hidden = upcoming.length > 0;
+      } catch {
+        showsNote.textContent = 'Could not load shows. Reopen Shows to try again.';
+      }
+    }
+
+    let showsRequest;
+    document.querySelector('[data-modal="showsModal"]').addEventListener('click', () => {
+      if (!showsRequest) {
+        showsRequest = loadUpcomingShows().finally(() => { showsRequest = null; });
+      }
+    });
 
     const modalButtons = document.querySelectorAll('[data-modal]');
     const backdrops = document.querySelectorAll('.modal-backdrop');
