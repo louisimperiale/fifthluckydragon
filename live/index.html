@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +50,7 @@
       padding: 60px 24px;
     }
 
-    h1, h2 {
+    h1, .show-title {
       font-family: 'Bebas Neue', sans-serif;
       font-weight: normal;
       line-height: 1.1;
@@ -59,80 +58,86 @@
 
     h1 {
       font-size: clamp(60px, 11vw, 120px);
-      margin: 10px 0;
-    }
-
-    h2 {
-      font-size: 44px;
-      margin: 10px 0;
-    }
-
-    .label {
-      color: var(--red);
-      font-size: 10px;
-      letter-spacing: 2px;
-    }
-
-    .intro {
-      color: var(--muted);
-      max-width: 650px;
+      margin: 0 0 28px;
     }
 
     .show {
-      margin-top: 65px;
-      padding-top: 25px;
       border-top: 1px solid var(--border);
     }
 
+    .show:last-child { border-bottom: 1px solid var(--border); }
+
+    summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2px 20px;
+      padding: 16px 0;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary:hover .show-title { color: var(--muted); }
+
+    summary:focus-visible, .videos a:focus-visible {
+      outline: 2px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .show-title { font-size: clamp(26px, 5vw, 38px); }
+
+    .show-meta {
+      grid-column: 1;
+      color: var(--muted);
+    }
+
+    .show-toggle {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      font-size: 22px;
+      color: var(--red);
+    }
+
+    .show-toggle::before { content: "+"; }
+    details[open] .show-toggle::before { content: "−"; }
+
+    .show-media { padding: 2px 0 24px; }
+
+    .photo-set { display: none; }
+    .photo-set:has(img:not([hidden])) { display: block; margin-bottom: 12px; }
+
     .gallery {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 175px), 1fr));
       gap: 12px;
-      margin-top: 25px;
     }
 
     .gallery img {
       width: 100%;
-      height: 300px;
+      aspect-ratio: 4 / 3;
       object-fit: cover;
-      display: block;
-    }
-
-    .videos {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 18px;
-      margin-top: 25px;
-    }
-
-    .video {
-      border: 1px solid var(--border);
-      padding: 12px;
-    }
-
-    .frame {
-      aspect-ratio: 16 / 9;
-    }
-
-    .video.phone .frame {
-      aspect-ratio: 9 / 16;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .video p {
-      color: var(--muted);
-      font-size: 10px;
     }
 
     .credit {
       color: var(--muted);
       font-size: 10px;
     }
+
+    .videos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .videos a {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+    }
+
+    .videos a:hover { border-color: var(--muted); }
 
     footer {
       border-top: 1px solid var(--border);
@@ -142,18 +147,6 @@
     }
 
     @media (max-width: 650px) {
-      .gallery {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .gallery img {
-        height: 220px;
-      }
-
-      .videos {
-        grid-template-columns: 1fr 1fr;
-      }
-
       main {
         padding: 40px 18px;
       }
@@ -168,118 +161,84 @@
   </header>
 
   <main>
-    <div class="label">LIVE DOCUMENTS / INDEX</div>
     <h1>THE ARCHIVE<span style="color:#c8382a">.</span></h1>
 
-    <p class="intro">
-      A running collection of nights, cameras,
-      photographs and performances.
-      Some of it blurry. All of it real.
-    </p>
-
     <!-- HOOSIER DOME -->
-    <section class="show" id="2026-11-14">
-      <div class="label">2026-11-14 / INDIANAPOLIS, IN</div>
-      <h2>HOOSIER DOME</h2>
-      <p>November 14, 2026</p>
-
-      <div class="gallery">
-        <img src="/images/live/2026-11-14/scrl_0255.webp" alt="Fifth Lucky Dragon band portrait" loading="lazy">
-        <img src="/images/live/2026-11-14/scrl_0236.webp" alt="Live vocal performance" loading="lazy">
-        <img src="/images/live/2026-11-14/scrl_0248.webp" alt="Drummer performing" loading="lazy">
-        <img src="/images/live/2026-11-14/scrl_0251.webp" alt="Fifth Lucky Dragon on stage" loading="lazy">
-        <img src="/images/live/2026-11-14/scrl_0252.webp" alt="Guitarist performing" loading="lazy">
-      </div>
-
-      <p class="credit">PHOTOS: itsjusthalo</p>
-
-      <div class="videos">
-        <div class="video phone">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/27LqV5GtvQU" title="Phone 1" allowfullscreen></iframe>
+    <details class="show" id="2026-11-14">
+      <summary>
+        <span class="show-title">HOOSIER DOME</span>
+        <span class="show-meta"><time datetime="2026-11-14">2026-11-14</time> · INDIANAPOLIS, IN</span>
+        <span class="show-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="show-media">
+        <div class="photo-set">
+          <div class="gallery">
+            <img src="/images/live/2026-11-14/scrl_0255.webp" alt="Fifth Lucky Dragon band portrait" hidden decoding="async" onload="this.hidden = false">
+            <img src="/images/live/2026-11-14/scrl_0236.webp" alt="Live vocal performance" hidden decoding="async" onload="this.hidden = false">
+            <img src="/images/live/2026-11-14/scrl_0248.webp" alt="Drummer performing" hidden decoding="async" onload="this.hidden = false">
+            <img src="/images/live/2026-11-14/scrl_0251.webp" alt="Fifth Lucky Dragon on stage" hidden decoding="async" onload="this.hidden = false">
+            <img src="/images/live/2026-11-14/scrl_0252.webp" alt="Guitarist performing" hidden decoding="async" onload="this.hidden = false">
           </div>
-          <p>PHONE 1 / 2026-11-14</p>
+
+          <p class="credit">Photos by itsjusthalo</p>
         </div>
-
-        <div class="video phone">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/fNIsW3rSGik" title="Phone 2" allowfullscreen></iframe>
-          </div>
-          <p>PHONE 2 / 2026-11-14</p>
-        </div>
-
-        <div class="video phone">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/V509f2NwAQ4" title="Phone 3" allowfullscreen></iframe>
-          </div>
-          <p>PHONE 3 / 2026-11-14</p>
-        </div>
-
-        <div class="video phone">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/JaAShjyuScU" title="Phone 4" allowfullscreen></iframe>
-          </div>
-          <p>PHONE 4 / 2026-11-14</p>
-        </div>
-
-        <div class="video">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/wzblImybFPA" title="Brainfreeze live" allowfullscreen></iframe>
-          </div>
-          <p>BRAINFREEZE / UNRELEASED</p>
+        <div class="videos">
+          <a href="https://www.youtube.com/watch?v=27LqV5GtvQU">Phone 1 ↗</a>
+          <a href="https://www.youtube.com/watch?v=fNIsW3rSGik">Phone 2 ↗</a>
+          <a href="https://www.youtube.com/watch?v=V509f2NwAQ4">Phone 3 ↗</a>
+          <a href="https://www.youtube.com/watch?v=JaAShjyuScU">Phone 4 ↗</a>
+          <a href="https://www.youtube.com/watch?v=wzblImybFPA">Brainfreeze ↗</a>
         </div>
       </div>
-    </section>
+    </details>
 
     <!-- FEVERDREAM -->
-    <section class="show" id="2026-10-10">
-      <div class="label">2026-10-10 / NOBLESVILLE, IN</div>
-      <h2>FEVERDREAM HALLOWEEN FESTIVAL</h2>
-
-      <div class="gallery">
-        <img src="/images/live/2026-10-10/scrl_0142.webp" alt="Fifth Lucky Dragon performing at FeverDream" loading="lazy">
-        <img src="/images/live/2026-10-10/scrl_0150.webp" alt="Vocal performance at FeverDream" loading="lazy">
-      </div>
-
-      <div class="videos">
-        <div class="video">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/Ggy7MCWCT5g" title="I Killed My Friend live at FeverDream" allowfullscreen></iframe>
+    <details class="show" id="2026-10-10">
+      <summary>
+        <span class="show-title">FEVERDREAM HALLOWEEN FESTIVAL</span>
+        <span class="show-meta"><time datetime="2026-10-10">2026-10-10</time> · NOBLESVILLE, IN</span>
+        <span class="show-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="show-media">
+        <div class="photo-set">
+          <div class="gallery">
+            <img src="/images/live/2026-10-10/scrl_0142.webp" alt="Fifth Lucky Dragon performing at FeverDream" hidden decoding="async" onload="this.hidden = false">
+            <img src="/images/live/2026-10-10/scrl_0150.webp" alt="Vocal performance at FeverDream" hidden decoding="async" onload="this.hidden = false">
           </div>
-          <p>I KILLED MY FRIEND? / CAMCORDER</p>
+        </div>
+        <div class="videos">
+          <a href="https://www.youtube.com/watch?v=Ggy7MCWCT5g">I Killed My Friend? ↗</a>
         </div>
       </div>
-    </section>
+    </details>
 
     <!-- RUGBY ROCKS -->
-    <section class="show" id="2026-08-29">
-      <div class="label">2026-08-29 / AGUILAR, CO</div>
-      <h2>RUGBY ROCKS FESTIVAL</h2>
-
-      <div class="videos">
-        <div class="video">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/FGNCLufN0lo" title="Headless Barbies live at Rugby Rocks" allowfullscreen></iframe>
-          </div>
-          <p>HEADLESS BARBIES / CAMCORDER</p>
+    <details class="show" id="2026-08-29">
+      <summary>
+        <span class="show-title">RUGBY ROCKS FESTIVAL</span>
+        <span class="show-meta"><time datetime="2026-08-29">2026-08-29</time> · AGUILAR, CO</span>
+        <span class="show-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="show-media">
+        <div class="videos">
+          <a href="https://www.youtube.com/watch?v=FGNCLufN0lo">Headless Barbies ↗</a>
         </div>
       </div>
-    </section>
+    </details>
 
     <!-- HI-FI -->
-    <section class="show" id="2025-03-18">
-      <div class="label">2025-03-18 / INDIANAPOLIS, IN</div>
-      <h2>HI-FI</h2>
-
-      <div class="videos">
-        <div class="video">
-          <div class="frame">
-            <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/i9LcGMvJHkU" title="I Killed My Friend live at HI-FI" allowfullscreen></iframe>
-          </div>
-          <p>I KILLED MY FRIEND? / CAMCORDER</p>
+    <details class="show" id="2025-03-18">
+      <summary>
+        <span class="show-title">HI-FI</span>
+        <span class="show-meta"><time datetime="2025-03-18">2025-03-18</time> · INDIANAPOLIS, IN</span>
+        <span class="show-toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="show-media">
+        <div class="videos">
+          <a href="https://www.youtube.com/watch?v=i9LcGMvJHkU">I Killed My Friend? ↗</a>
         </div>
       </div>
-    </section>
+    </details>
   </main>
 
   <footer>
